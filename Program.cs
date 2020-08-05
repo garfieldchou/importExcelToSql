@@ -2,8 +2,8 @@
 using System.IO;
 using System.Text;
 using ExcelDataReader;
-
 using static System.Console;
+using static SteamData.DownloadedStatistics.DownloadedStatisticsUtils;
 
 namespace importSteamToSql
 {
@@ -66,6 +66,7 @@ namespace importSteamToSql
 
           WriteLine(result.Tables);
           // The result of each spreadsheet is in result.Tables
+          ImportCountryList(result);
         }
       }
     }
