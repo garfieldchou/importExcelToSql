@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using static System.Console;
+using SteamData;
 using static SteamData.DownloadedStatistics.DownloadedStatisticsUtils;
 
 namespace importSteamToSql
@@ -14,7 +15,11 @@ namespace importSteamToSql
 
       WriteLine(result.Tables);
       // The result of each spreadsheet is in result.Tables
-      ImportCountryList(result);
+      using (var steamDb = new SteamDataContext())
+      {
+        ImportCountryList(steamDb, result);
+      }
+
     }
   }
 }
