@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using static System.Console;
 using SteamData;
+using SteamData.Utils;
 using static SteamData.DownloadedStatistics.DownloadedStatisticsUtils;
 
 namespace importSteamToSql
@@ -11,7 +12,7 @@ namespace importSteamToSql
     {
       Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-      var result = GetExcelContent("DownloadedStatistics_20200601.xlsx");
+      var result = CommonUtils.GetExcelContent("DownloadedStatistics_20200601.xlsx");
 
       WriteLine(result.Tables);
       // The result of each spreadsheet is in result.Tables
