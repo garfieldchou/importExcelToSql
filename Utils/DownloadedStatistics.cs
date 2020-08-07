@@ -1,5 +1,7 @@
+using System;
 using System.Data;
 using static System.Console;
+using SteamData.Utils;
 
 namespace SteamData.DownloadedStatistics
 {
@@ -28,6 +30,38 @@ namespace SteamData.DownloadedStatistics
           }
         }
       }
+    }
+    public static void ImportRegionDLStatDetail(SteamDataContext db, DataSet dataSet)
+    {
+      var bwDetails = dataSet.Tables[0];
+      int columnCount = bwDetails.Columns.Count;
+
+      foreach (DataRow row in bwDetails.Rows)
+      {
+        // skip the header
+        if (row[0].ToString() == "") continue;
+        // ignore the summary
+        if (row[columnCount - 1].ToString() == "") break;
+
+        for (int i = 0; i < columnCount / 4; i++)
+        {
+          var dateTime = DateTime.Parse(row[4 * i + 2].ToString());
+
+          var dlDetail = new RegionDLStatDetail
+          {
+            Year = dateTime.Year,
+            Month = dateTime.Month,
+            WorkWeek = CommonUtils.GetIso8601WeekOfYear(dateTime),
+            Day = dateTime.Day,
+            Time = dateTime,
+            Country = row[4 * i + 1].ToString(),
+            BandWidthGbps = Int32.Parse(row[4 * i + 3].ToString())
+          };
+
+          db.RegionDLStatDetails.Add(dlDetail);
+        }
+      }
+      db.SaveChanges();
     }
 
   }
