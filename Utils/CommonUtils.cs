@@ -5,7 +5,7 @@ using System.Data;
 using ExcelDataReader;
 namespace SteamData.Utils
 {
-  public class CommonUtils
+  public static class CommonUtils
   {
     public static DataSet GetExcelContent(string filename)
     {
@@ -62,7 +62,7 @@ namespace SteamData.Utils
         }
       }
     }
-    public static int GetIso8601WeekOfYear(DateTime time)
+    public static int GetIso8601WeekOfYear(this DateTime time)
     {
       // Seriously cheat.  If its Monday, Tuesday or Wednesday, then it'll 
       // be the same week# as whatever Thursday, Friday or Saturday are,

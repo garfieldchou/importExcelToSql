@@ -51,7 +51,7 @@ namespace SteamData.DownloadedStatistics
           {
             Year = dateTime.Year,
             Month = dateTime.Month,
-            WorkWeek = CommonUtils.GetIso8601WeekOfYear(dateTime),
+            WorkWeek = dateTime.GetIso8601WeekOfYear(),
             Day = dateTime.Day,
             Time = dateTime,
             Country = row[4 * i + 1].ToString(),
