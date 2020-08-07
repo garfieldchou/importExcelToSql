@@ -11,15 +11,25 @@ namespace SteamData.DownloadedStatistics
     {
       foreach (var item in dataSet.Tables)
       {
-        if (item.ToString() == "BandWidth Data") continue;
-
-        var country = new CountryList
+        try
         {
-          Country = item.ToString()
-        };
-        db.CountryLists.Add(country);
+          if (item.ToString() == "BandWidth Data") continue;
+
+          var country = new CountryList
+          {
+            Country = item.ToString()
+          };
+          db.CountryLists.Add(country);
+          db.SaveChanges();
+        }
+        catch (System.Exception ex)
+        {
+          if (((Microsoft.Data.Sqlite.SqliteException)ex.InnerException).SqliteErrorCode == 19)
+          {
+            WriteLine($"{item.ToString(),32} already exists.");
+          }
+        }
       }
-      db.SaveChanges();
     }
     public static DataSet GetExcelContent(string filename)
     {
