@@ -34,5 +34,13 @@ namespace SteamData
 
       optionsBuilder.UseSqlite($"Filename={path}");
     }
+    protected override void OnModelCreating(
+      ModelBuilder modelBuilder)
+    {
+      modelBuilder.Entity<CountryList>()
+          .HasIndex(countryList => countryList.Country)
+          .IsUnique();
+    }
+
   }
 }
