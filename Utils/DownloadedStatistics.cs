@@ -63,7 +63,30 @@ namespace SteamData.DownloadedStatistics
       }
       db.SaveChanges();
     }
+    public static void ImportCountryDLStatOverview(SteamDataContext db, DataSet dataSet, DateTime reportDate)
+    {
+      foreach (DataTable table in dataSet.Tables)
+      {
+        string country = table.ToString();
+        if (country == "BandWidth Data") continue;
 
+        var dlStat = new CountryDLStatOverview
+        {
+          Year = reportDate.Year,
+          Month = reportDate.Month,
+          WorkWeek = reportDate.GetIso8601WeekOfYear(),
+          Day = reportDate.Day,
+          Time = reportDate,
+          Country = country,
+          TotalTb = Decimal.Parse(((string)(table.Rows[4][1])).Split(' ')[0]),
+          AvgDlSpeedMbps = Decimal.Parse(((string)(table.Rows[4][2])).Split(' ')[0]),
+          SteamPercent = Decimal.Parse(((string)(table.Rows[4][3])).Split('%')[0])
+        };
+
+        db.CountryDLStatOverviews.Add(dlStat);
+      }
+      db.SaveChanges();
+    }
   }
 
 }
