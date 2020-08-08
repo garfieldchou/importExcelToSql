@@ -87,6 +87,29 @@ namespace SteamData.DownloadedStatistics
       }
       db.SaveChanges();
     }
+    public static void ImportCountryNetworkDLStat(SteamDataContext db, DataSet dataSet, DateTime reportDate)
+    {
+      foreach (DataTable table in dataSet.Tables)
+      {
+        string sheetName = table.ToString();
+        if (sheetName == "BandWidth Data") continue;
+
+        string country = (string)table.Rows[1][1];
+        for (int i = 9; i < table.Rows.Count; i++)
+        {
+          string network = table.Rows[i][1].ToString();
+          var networkDlStat = new CountryNetworkDLStat
+          {
+            Time = reportDate,
+            Country = country,
+            Network = network,
+            AvgDlSpeedMbps = Decimal.Parse(((string)(table.Rows[i][2])).Split(' ')[0])
+          };
+          db.CountryNetworkDLStats.Add(networkDlStat);
+        }
+      }
+      db.SaveChanges();
+    }
   }
 
 }
