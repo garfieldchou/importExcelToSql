@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using static System.Console;
 using SteamData;
 using SteamData.Utils;
@@ -11,6 +12,8 @@ namespace importSteamToSql
     static void Main(string[] args)
     {
       Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
+      DateTime reportDate = DateTime.Parse("DownloadedStatistics_20200601.xlsx".Split(new[] { '_', '.' })[1].ToDateString());
 
       var result = CommonUtils.GetExcelContent("DownloadedStatistics_20200601.xlsx");
 
