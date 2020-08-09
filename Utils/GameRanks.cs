@@ -1,7 +1,6 @@
 using System;
 using System.Data;
 using static System.Globalization.NumberStyles;
-using static System.Console;
 using SteamData.Utils;
 
 namespace SteamData.GameRanks
@@ -53,6 +52,28 @@ namespace SteamData.GameRanks
           Players = players,
           Peak = peak,
           Game = game
+        });
+      }
+      db.SaveChanges();
+    }
+
+    public static void ImportDetailsGame(SteamDataContext db, DataSet dataSet)
+    {
+      var gameDetails = dataSet.Tables[2];
+      for (int i = 1; i < gameDetails.Rows.Count; i++)
+      {
+        DataRow detail = gameDetails.Rows[i];
+        DateTime releaseDate = DateTime.Parse(detail[4].ToString());
+
+        db.DetailsGames.Add(new DetailsGame
+        {
+          Game = detail[0].ToString(),
+          GameDescription = detail[1].ToString(),
+          RecentReviews = detail[2].ToString(),
+          AllReviews = detail[3].ToString(),
+          ReleaseDate = releaseDate,
+          HotTags = detail[5].ToString(),
+          SystemRequirements = detail[6].ToString()
         });
       }
       db.SaveChanges();
