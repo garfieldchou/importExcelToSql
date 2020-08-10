@@ -29,10 +29,8 @@ namespace SteamData
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-      string path = System.IO.Path.Combine(
-        System.Environment.CurrentDirectory, "Steam.db");
-
-      optionsBuilder.UseSqlite($"Filename={path}");
+      optionsBuilder.UseSqlServer(
+        @"Server=APZA001GOD;Database=Steam;Integrated Security=True");
     }
     protected override void OnModelCreating(
       ModelBuilder modelBuilder)
