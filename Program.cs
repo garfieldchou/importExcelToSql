@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Data;
 using static System.IO.File;
 using static System.Console;
@@ -21,36 +22,53 @@ namespace importSteamToSql
         return;
       }
 
-      if (!Exists(args[0]))
+      string fileName = args[0];
+      var fileNameChecker = new Regex(@"(DownloadedStatistics|Game Ranks|HWSSurvey)_(\d{8}).xlsx$");
+      Match match = fileNameChecker.Match(fileName);
+
+      if (match == Match.Empty)
       {
-        WriteLine("File does not exist.");
+        WriteLine("File is not supported.");
         return;
       }
       else
       {
-        ImportSteamData(args[0]);
-      }
-    }
-
-    static void ImportSteamData(string fileName)
-    {
-      Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-      DateTime reportDate = DateTime.ParseExact(fileName.Split(new[] { '_', '.' })[1], "yyyyMMdd", null);
-      var result = CommonUtils.GetExcelContent(fileName);
-
-      using (var steamDb = new SteamDataContext())
-      {
-        if (fileName.StartsWith("DownloadedStatistics"))
+        if (!Exists(fileName))
         {
-          ImportDownloadedStatistics(steamDb, result, reportDate);
-        }
-        else if (fileName.StartsWith("Game Ranks"))
-        {
-          ImportGameRank(steamDb, result, reportDate);
+          WriteLine("File does not exist.");
+          return;
         }
         else
         {
-          ImportHardwareSoftwareSurvey(steamDb, result, reportDate);
+          string category = match.Groups[1].Captures[0].ToString();
+          DateTime reportDate = DateTime.ParseExact(match.Groups[2].Captures[0].ToString(), "yyyyMMdd", null);
+
+          Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+          var content = CommonUtils.GetExcelContent(fileName);
+
+          ImportSteamData(category, reportDate, content);
+        }
+      }
+    }
+
+    static void ImportSteamData(string category, DateTime reportDate, DataSet content)
+    {
+      using (var steamDb = new SteamDataContext())
+      {
+        switch (category)
+        {
+          case "DownloadedStatistics":
+            ImportDownloadedStatistics(steamDb, content, reportDate);
+            break;
+          case "Game Ranks":
+            ImportGameRank(steamDb, content, reportDate);
+            break;
+          case "HWSSurvey":
+            ImportHardwareSoftwareSurvey(steamDb, content, reportDate);
+            break;
+          default:
+            WriteLine("Category not found.");
+            break;
         }
       }
     }
