@@ -76,9 +76,5 @@ namespace SteamData.Utils
       // Return the week of our adjusted day
       return CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(time, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
     }
-    public static string ToDateString(this string dateInFileName)
-    {
-      return dateInFileName.Substring(0, 4) + '/' + dateInFileName.Substring(4, 2) + '/' + dateInFileName.Substring(6, 2);
-    }
   }
 }
