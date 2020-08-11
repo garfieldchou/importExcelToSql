@@ -9,17 +9,16 @@ namespace SteamData.DownloadedStatistics
   {
     public static void ImportCountryList(SteamDataContext db, DataSet dataSet)
     {
-      foreach (var item in dataSet.Tables)
+      foreach (DataTable item in dataSet.Tables)
       {
         try
         {
           if (item.ToString() == "BandWidth Data") continue;
 
-          var country = new CountryList
+          db.CountryLists.Add(new CountryList
           {
-            Country = item.ToString()
-          };
-          db.CountryLists.Add(country);
+            Country = item.Rows[1][1].ToString()
+          });
           db.SaveChanges();
         }
         catch (System.Exception ex)
