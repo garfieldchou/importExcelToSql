@@ -65,6 +65,8 @@ namespace SteamData.DownloadedStatistics
     }
     public static void ImportCountryDLStatOverview(SteamDataContext db, DataSet dataSet, DateTime reportDate)
     {
+      WriteLine("ImportCountryDLStatOverview !!!");
+      return;
       foreach (DataTable table in dataSet.Tables)
       {
         string country = table.ToString();
@@ -89,6 +91,8 @@ namespace SteamData.DownloadedStatistics
     }
     public static void ImportCountryNetworkDLStat(SteamDataContext db, DataSet dataSet, DateTime reportDate)
     {
+      WriteLine("ImportCountryNetworkDLStat !!!");
+      return;
       foreach (DataTable table in dataSet.Tables)
       {
         string sheetName = table.ToString();

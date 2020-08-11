@@ -13,6 +13,8 @@ namespace importSteamToSql
 {
   class Program
   {
+    delegate void DelegateWithDownloadedStatistics(SteamDataContext db, DataSet dataSet, DateTime reportDate);
+
     static void Main(string[] args)
     {
       if (args.Length != 1)
@@ -34,6 +36,9 @@ namespace importSteamToSql
 
     static void ImportSteamData(string fileName)
     {
+      var delegateWithDownloadedStatistics = new DelegateWithDownloadedStatistics(ImportCountryDLStatOverview);
+      delegateWithDownloadedStatistics += ImportCountryNetworkDLStat;
+
       Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
       DateTime reportDate = DateTime.Parse(fileName.Split(new[] { '_', '.' })[1].ToDateString());
       var result = CommonUtils.GetExcelContent(fileName);
@@ -42,15 +47,16 @@ namespace importSteamToSql
       {
         if (fileName.StartsWith("DownloadedStatistics"))
         {
-          ImportDownloadedStatistics(steamDb, result, reportDate);
+          // ImportDownloadedStatistics(steamDb, result, reportDate);
+          delegateWithDownloadedStatistics(steamDb, result, reportDate);
         }
         else if (fileName.StartsWith("Game Ranks"))
         {
-          ImportGameRank(steamDb, result, reportDate);
+          // ImportGameRank(steamDb, result, reportDate);
         }
         else
         {
-          ImportHardwareSoftwareSurvey(steamDb, result, reportDate);
+          // ImportHardwareSoftwareSurvey(steamDb, result, reportDate);
         }
       }
     }
