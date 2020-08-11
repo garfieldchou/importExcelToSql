@@ -35,7 +35,7 @@ namespace importSteamToSql
     static void ImportSteamData(string fileName)
     {
       Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-      DateTime reportDate = DateTime.Parse(fileName.Split(new[] { '_', '.' })[1].ToDateString());
+      DateTime reportDate = DateTime.ParseExact(fileName.Split(new[] { '_', '.' })[1], "yyyyMMdd", null);
       var result = CommonUtils.GetExcelContent(fileName);
 
       using (var steamDb = new SteamDataContext())
