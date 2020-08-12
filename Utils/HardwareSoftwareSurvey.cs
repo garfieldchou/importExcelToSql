@@ -1,6 +1,7 @@
 using System;
 using System.Data;
 using SteamData.Utils;
+using static System.Console;
 
 namespace SteamData.HardwareSoftwareSurvey
 {
@@ -28,7 +29,8 @@ namespace SteamData.HardwareSoftwareSurvey
           Percentage = Decimal.Parse(survey[3].ToString().Split('%')[0])
         });
       }
-      db.SaveChanges();
+      int affected = db.SaveChanges();
+      WriteLine($"{affected} items are imported");
     }
   }
 }
