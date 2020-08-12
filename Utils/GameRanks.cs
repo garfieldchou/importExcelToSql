@@ -1,7 +1,8 @@
 using System;
 using System.Data;
-using static System.Globalization.NumberStyles;
 using SteamData.Utils;
+using static System.Globalization.NumberStyles;
+using static System.Console;
 
 namespace SteamData.GameRanks
 {
@@ -27,7 +28,8 @@ namespace SteamData.GameRanks
           Players = players
         });
       }
-      db.SaveChanges();
+      int affected = db.SaveChanges();
+      WriteLine($"{affected} items are imported"); ;
     }
 
     public static void ImportGameRanks(SteamDataContext db, DataSet dataSet, DateTime reportDate)
@@ -54,7 +56,8 @@ namespace SteamData.GameRanks
           Game = game
         });
       }
-      db.SaveChanges();
+      int affected = db.SaveChanges();
+      WriteLine($"{affected} items are imported"); ;
     }
 
     public static void ImportDetailsGame(SteamDataContext db, DataSet dataSet)
@@ -76,7 +79,8 @@ namespace SteamData.GameRanks
           SystemRequirements = detail[6].ToString()
         });
       }
-      db.SaveChanges();
+      int affected = db.SaveChanges();
+      WriteLine($"{affected} items are imported"); ;
     }
   }
 }

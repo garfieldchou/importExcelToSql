@@ -9,6 +9,8 @@ namespace SteamData.DownloadedStatistics
   {
     public static void ImportCountryList(SteamDataContext db, DataSet dataSet)
     {
+      int affected = 0;
+
       foreach (DataTable item in dataSet.Tables)
       {
         try
@@ -19,7 +21,7 @@ namespace SteamData.DownloadedStatistics
           {
             Country = item.Rows[1][1].ToString()
           });
-          db.SaveChanges();
+          affected += db.SaveChanges();
         }
         catch (System.Exception ex)
         {
@@ -29,6 +31,7 @@ namespace SteamData.DownloadedStatistics
           }
         }
       }
+      WriteLine($"{affected} items are imported"); ;
     }
     public static void ImportRegionDLStatDetail(SteamDataContext db, DataSet dataSet)
     {
@@ -60,7 +63,8 @@ namespace SteamData.DownloadedStatistics
           db.RegionDLStatDetails.Add(dlDetail);
         }
       }
-      db.SaveChanges();
+      int affected = db.SaveChanges();
+      WriteLine($"{affected} items are imported"); ;
     }
     public static void ImportCountryDLStatOverview(SteamDataContext db, DataSet dataSet, DateTime reportDate)
     {
@@ -84,7 +88,8 @@ namespace SteamData.DownloadedStatistics
 
         db.CountryDLStatOverviews.Add(dlStat);
       }
-      db.SaveChanges();
+      int affected = db.SaveChanges();
+      WriteLine($"{affected} items are imported"); ;
     }
     public static void ImportCountryNetworkDLStat(SteamDataContext db, DataSet dataSet, DateTime reportDate)
     {
@@ -107,7 +112,8 @@ namespace SteamData.DownloadedStatistics
           db.CountryNetworkDLStats.Add(networkDlStat);
         }
       }
-      db.SaveChanges();
+      int affected = db.SaveChanges();
+      WriteLine($"{affected} items are imported"); ;
     }
   }
 
