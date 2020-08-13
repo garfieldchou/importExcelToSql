@@ -1,3 +1,4 @@
+using System;
 using Microsoft.EntityFrameworkCore;
 using SteamData.DownloadedStatistics;
 using SteamData.GameRanks;
@@ -40,6 +41,19 @@ namespace SteamData
       modelBuilder.Entity<CountryList>()
           .HasIndex(countryList => countryList.Country)
           .IsUnique();
+
+      modelBuilder.Entity<DetailsGame>()
+          .HasData(new DetailsGame
+          {
+            DetailsGameId = 1,
+            Game = string.Empty,
+            GameDescription = string.Empty,
+            RecentReviews = string.Empty,
+            AllReviews = string.Empty,
+            ReleaseDate = DateTime.MinValue,
+            HotTags = string.Empty,
+            SystemRequirements = string.Empty,
+          });
     }
 
   }
