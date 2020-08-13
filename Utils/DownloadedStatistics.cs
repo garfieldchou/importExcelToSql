@@ -81,7 +81,7 @@ namespace SteamData.DownloadedStatistics
           Day = reportDate.Day,
           Time = reportDate,
           Country = country,
-          TotalTb = Decimal.Parse(((string)(table.Rows[4][1])).Split(' ')[0]),
+          TotalTb = table.Rows[4][1].ToString().ConvertTotalBytesTB(),
           AvgDlSpeedMbps = Decimal.Parse(((string)(table.Rows[4][2])).Split(' ')[0]),
           SteamPercent = Decimal.Parse(((string)(table.Rows[4][3])).Split('%')[0])
         };
