@@ -76,5 +76,22 @@ namespace SteamData.Utils
       // Return the week of our adjusted day
       return CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(time, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
     }
+
+    public static decimal ConvertTotalBytesTB(this string totalBytes)
+    {
+      string[] numberAndUnit = totalBytes.Split(' ');
+      decimal bytesNumber = Decimal.Parse(numberAndUnit[0]);
+      string unit = numberAndUnit[1];
+
+      return unit switch
+      {
+        "PB" => bytesNumber * (decimal)Math.Pow(10, 3),
+        "TB" => bytesNumber,
+        "GB" => bytesNumber * (decimal)Math.Pow(10, -3),
+        "MB" => bytesNumber * (decimal)Math.Pow(10, -6),
+        "kB" => bytesNumber * (decimal)Math.Pow(10, -9),
+        _ => -1M
+      };
+    }
   }
 }
