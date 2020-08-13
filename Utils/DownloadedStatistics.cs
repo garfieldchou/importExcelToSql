@@ -49,18 +49,18 @@ namespace SteamData.DownloadedStatistics
         {
           var dateTime = DateTime.Parse(row[4 * i + 2].ToString());
 
-          var dlDetail = new RegionDLStatDetail
+          db.RegionDLStatDetails.Add(new RegionDLStatDetail
           {
             Year = dateTime.Year,
             Month = dateTime.Month,
             WorkWeek = dateTime.GetIso8601WeekOfYear(),
             Day = dateTime.Day,
-            Time = dateTime,
+            Date = dateTime.Date.ToString("MM/dd"),
+            Time = dateTime.TimeOfDay,
+            Full_DateTime = dateTime,
             Country = row[4 * i + 1].ToString(),
             BandWidthGbps = Int32.Parse(row[4 * i + 3].ToString())
-          };
-
-          db.RegionDLStatDetails.Add(dlDetail);
+          });
         }
       }
       int affected = db.SaveChanges();
