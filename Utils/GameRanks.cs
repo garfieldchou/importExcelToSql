@@ -1,6 +1,8 @@
 using System;
+using System.Linq;
 using System.Data;
 using SteamData.Utils;
+using System.Collections.Generic;
 using static System.Globalization.NumberStyles;
 using static System.Console;
 
@@ -35,6 +37,13 @@ namespace SteamData.GameRanks
     public static void ImportGameRanks(SteamDataContext db, DataSet dataSet, DateTime reportDate)
     {
       var gameRank = dataSet.Tables[1];
+      var gameDetailsDict = new Dictionary<string, int>();
+      IQueryable<DetailsGame> gameDetails = db.DetailsGames;
+
+      foreach (var detail in gameDetails)
+      {
+        gameDetailsDict.Add(detail.Game, detail.DetailsGameId);
+      }
 
       for (int i = 1; i < gameRank.Rows.Count; i++)
       {
@@ -42,6 +51,9 @@ namespace SteamData.GameRanks
         int players = Int32.Parse(gameRank.Rows[i][1].ToString(), AllowThousands);
         int peak = Int32.Parse(gameRank.Rows[i][2].ToString(), AllowThousands);
         string game = gameRank.Rows[i][3].ToString();
+        int gameId;
+
+        if (!gameDetailsDict.TryGetValue(game, out gameId)) gameId = 1;
 
         db.GameRanks.Add(new GameRank
         {
@@ -53,7 +65,8 @@ namespace SteamData.GameRanks
           Ranks = rank,
           Players = players,
           Peak = peak,
-          Game = game
+          Game = game,
+          DetailsGameId = gameId
         });
       }
       int affected = db.SaveChanges();
