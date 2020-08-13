@@ -38,7 +38,7 @@ namespace SteamData.GameRanks
 
       for (int i = 1; i < gameRank.Rows.Count; i++)
       {
-        int rank = Int32.Parse(gameRank.Rows[i][0].ToString());
+        int rank = Int32.Parse(gameRank.Rows[i][0].ToString()) + 1;
         int players = Int32.Parse(gameRank.Rows[i][1].ToString(), AllowThousands);
         int peak = Int32.Parse(gameRank.Rows[i][2].ToString(), AllowThousands);
         string game = gameRank.Rows[i][3].ToString();
