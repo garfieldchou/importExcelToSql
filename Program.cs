@@ -84,8 +84,8 @@ namespace importSteamToSql
     static void ImportGameRank(SteamDataContext db, DataSet dataSet, DateTime reportDate)
     {
       ImportOnlineStat(db, dataSet);
-      ImportGameRanks(db, dataSet, reportDate);
       ImportDetailsGame(db, dataSet);
+      ImportGameRanks(db, dataSet, reportDate);
     }
 
     static void ImportHardwareSoftwareSurvey(SteamDataContext db, DataSet dataSet, DateTime reportDate)
