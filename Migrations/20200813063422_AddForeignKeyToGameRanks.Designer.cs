@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SteamData;
 
 namespace importSteamToSql.Migrations
 {
     [DbContext(typeof(SteamDataContext))]
-    partial class SteamDataContextModelSnapshot : ModelSnapshot
+    [Migration("20200813063422_AddForeignKeyToGameRanks")]
+    partial class AddForeignKeyToGameRanks
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
