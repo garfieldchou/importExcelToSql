@@ -89,16 +89,20 @@ namespace SteamData.GameRanks
         DataRow detail = gameDetails.Rows[i];
         DateTime releaseDate = DateTime.Parse(detail[4].ToString());
 
-        db.DetailsGames.Add(new DetailsGame
+        string game = detail[0].ToString();
+        if (!db.DetailsGames.Any(d => d.Game == game))
         {
-          Game = detail[0].ToString(),
-          GameDescription = detail[1].ToString(),
-          RecentReviews = detail[2].ToString(),
-          AllReviews = detail[3].ToString(),
-          ReleaseDate = releaseDate,
-          HotTags = detail[5].ToString(),
-          SystemRequirements = detail[6].ToString()
-        });
+          db.DetailsGames.Add(new DetailsGame
+          {
+            Game = game,
+            GameDescription = detail[1].ToString(),
+            RecentReviews = detail[2].ToString(),
+            AllReviews = detail[3].ToString(),
+            ReleaseDate = releaseDate,
+            HotTags = detail[5].ToString(),
+            SystemRequirements = detail[6].ToString()
+          });
+        }
       }
       int affected = db.SaveChanges();
       WriteLine($"{affected} items are imported");
