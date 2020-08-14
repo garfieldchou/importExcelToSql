@@ -14,26 +14,16 @@ namespace SteamData.DownloadedStatistics
 
       foreach (DataTable item in dataSet.Tables)
       {
-        try
-        {
-          if (item.ToString() == "BandWidth Data") continue;
+        if (item.ToString() == "BandWidth Data") continue;
 
-          string country = item.Rows[1][1].ToString();
+        string country = item.Rows[1][1].ToString();
 
-          if (!db.CountryLists.Any(c => c.Country == country))
-          {
-            db.CountryLists.Add(new CountryList
-            {
-              Country = country
-            });
-          }
-        }
-        catch (System.Exception ex)
+        if (!db.CountryLists.Any(c => c.Country == country))
         {
-          if (((Microsoft.Data.Sqlite.SqliteException)ex.InnerException).SqliteErrorCode == 19)
+          db.CountryLists.Add(new CountryList
           {
-            WriteLine($"{item.ToString(),32} already exists.");
-          }
+            Country = country
+          });
         }
       }
       affected += db.SaveChanges();
