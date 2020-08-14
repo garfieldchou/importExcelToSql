@@ -1,5 +1,6 @@
 using System;
 using System.Data;
+using System.Linq;
 using static System.Console;
 using SteamData.Utils;
 
@@ -17,11 +18,15 @@ namespace SteamData.DownloadedStatistics
         {
           if (item.ToString() == "BandWidth Data") continue;
 
-          db.CountryLists.Add(new CountryList
+          string country = item.Rows[1][1].ToString();
+
+          if (!db.CountryLists.Any(c => c.Country == country))
           {
-            Country = item.Rows[1][1].ToString()
-          });
-          affected += db.SaveChanges();
+            db.CountryLists.Add(new CountryList
+            {
+              Country = country
+            });
+          }
         }
         catch (System.Exception ex)
         {
@@ -31,6 +36,7 @@ namespace SteamData.DownloadedStatistics
           }
         }
       }
+      affected += db.SaveChanges();
       WriteLine($"{affected} items are imported");
     }
     public static void ImportRegionDLStatDetail(SteamDataContext db, DataSet dataSet)
