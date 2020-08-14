@@ -34,6 +34,10 @@ namespace SteamData.DownloadedStatistics
       var bwDetails = dataSet.Tables[0];
       int columnCount = bwDetails.Columns.Count;
 
+      IQueryable<RegionDLStatDetail> detail =
+            db.RegionDLStatDetails.OrderByDescending(d => d.Full_DateTime).Take(1);
+      DateTime latestInDB = detail.Select(d => d.Full_DateTime).ToArray()[0];
+
       foreach (DataRow row in bwDetails.Rows)
       {
         // skip the header
@@ -45,18 +49,21 @@ namespace SteamData.DownloadedStatistics
         {
           var dateTime = DateTime.Parse(row[4 * i + 2].ToString());
 
-          db.RegionDLStatDetails.Add(new RegionDLStatDetail
+          if (dateTime > latestInDB)
           {
-            Year = dateTime.Year,
-            Month = dateTime.Month,
-            WorkWeek = dateTime.GetIso8601WeekOfYear(),
-            Day = dateTime.Day,
-            Date = dateTime.Date.ToString("MM/dd"),
-            Time = dateTime.TimeOfDay,
-            Full_DateTime = dateTime,
-            Country = row[4 * i + 1].ToString(),
-            BandWidthGbps = Int32.Parse(row[4 * i + 3].ToString())
-          });
+            db.RegionDLStatDetails.Add(new RegionDLStatDetail
+            {
+              Year = dateTime.Year,
+              Month = dateTime.Month,
+              WorkWeek = dateTime.GetIso8601WeekOfYear(),
+              Day = dateTime.Day,
+              Date = dateTime.Date.ToString("MM/dd"),
+              Time = dateTime.TimeOfDay,
+              Full_DateTime = dateTime,
+              Country = row[4 * i + 1].ToString(),
+              BandWidthGbps = Int32.Parse(row[4 * i + 3].ToString())
+            });
+          }
         }
       }
       int affected = db.SaveChanges();
