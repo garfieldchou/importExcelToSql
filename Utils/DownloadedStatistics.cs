@@ -33,10 +33,14 @@ namespace SteamData.DownloadedStatistics
     {
       var bwDetails = dataSet.Tables[0];
       int columnCount = bwDetails.Columns.Count;
+      DateTime latestInDB = DateTime.MinValue;
 
       IQueryable<RegionDLStatDetail> detail =
             db.RegionDLStatDetails.OrderByDescending(d => d.Full_DateTime).Take(1);
-      DateTime latestInDB = detail.Select(d => d.Full_DateTime).ToArray()[0];
+      if (detail.ToArray().Length > 0)
+      {
+        latestInDB = detail.Select(d => d.Full_DateTime).ToArray()[0];
+      }
 
       foreach (DataRow row in bwDetails.Rows)
       {

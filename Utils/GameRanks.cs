@@ -13,12 +13,14 @@ namespace SteamData.GameRanks
     public static void ImportOnlineStat(SteamDataContext db, DataSet dataSet)
     {
       var onlineStat = dataSet.Tables[0];
+      DateTime latestStatInDB = DateTime.MinValue;
 
-      DateTime latestStatInDB = db.OnlineStats
-        .OrderByDescending(s => s.DateTime)
-        .Take(1)
-        .Select(s => s.DateTime)
-        .ToArray()[0];
+      IQueryable<OnlineStat> stat =
+        db.OnlineStats.OrderByDescending(s => s.DateTime).Take(1);
+      if (stat.ToArray().Length > 0)
+      {
+        latestStatInDB = stat.Select(s => s.DateTime).ToArray()[0];
+      }
 
       for (int i = 4; i < onlineStat.Rows.Count; i++)
       {
