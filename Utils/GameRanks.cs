@@ -14,11 +14,11 @@ namespace SteamData.GameRanks
     {
       var onlineStat = dataSet.Tables[0];
 
-      DateTime[] stat = db.OnlineStats
-        .OrderByDescending(d => d.DateTime)
-        .Take(1)
-        .Select(d => d.DateTime)
-        .ToArray();
+      DateTime[] stat = (
+        from d in db.OnlineStats
+        let dt = d.DateTime
+        orderby dt descending
+        select dt).ToArray();
 
       DateTime latestStatInDB = stat.Length > 0 ? stat[0] : DateTime.MinValue;
 

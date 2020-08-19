@@ -34,11 +34,11 @@ namespace SteamData.DownloadedStatistics
       var bwDetails = dataSet.Tables[0];
       int columnCount = bwDetails.Columns.Count;
 
-      DateTime[] detail = db.RegionDLStatDetails
-        .OrderByDescending(d => d.Full_DateTime)
-        .Take(1)
-        .Select(d => d.Full_DateTime)
-        .ToArray();
+      DateTime[] detail = (
+        from d in db.RegionDLStatDetails
+        let dt = d.Full_DateTime
+        orderby dt descending
+        select dt).ToArray();
 
       DateTime latestInDB = detail.Length > 0 ? detail[0] : DateTime.MinValue;
 
