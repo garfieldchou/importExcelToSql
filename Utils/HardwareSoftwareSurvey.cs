@@ -15,7 +15,11 @@ namespace SteamData.HardwareSoftwareSurvey
       for (int i = 1; i < hwsSurvey.Rows.Count; i++)
       {
         DataRow survey = hwsSurvey.Rows[i];
-        if (survey[1].ToString() != "") category = (string)survey[1];
+        if (survey[1].ToString() != "")
+        {
+          category = (string)survey[1];
+          continue;
+        }
 
         db.HWSurveys.Add(new HWSurvey
         {
