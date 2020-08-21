@@ -14,5 +14,7 @@ namespace SteamData.DownloadedStatistics
     public decimal TotalTb { get; set; }
     public decimal AvgDlSpeedMbps { get; set; }
     public decimal SteamPercent { get; set; }
+    public int CountryListId { get; set; }
+    public virtual CountryList CountryList { get; set; }
   }
 }
