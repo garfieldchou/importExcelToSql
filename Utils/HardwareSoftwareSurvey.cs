@@ -1,5 +1,6 @@
 using System;
 using System.Data;
+using System.Text.RegularExpressions;
 using SteamData.Utils;
 using static System.Console;
 
@@ -20,6 +21,7 @@ namespace SteamData.HardwareSoftwareSurvey
           category = (string)survey[1];
           continue;
         }
+        string item = survey[2].ToString();
 
         db.HWSurveys.Add(new HWSurvey
         {
@@ -28,8 +30,8 @@ namespace SteamData.HardwareSoftwareSurvey
           WorkWeek = reportDate.GetIso8601WeekOfYear(),
           Day = reportDate.Day,
           Time = reportDate,
-          Category = category,
-          Item = survey[2].ToString(),
+          Category = category + (new Regex(@"^(Windows|OSX|Linux)$").IsMatch(item) ? "_SubTotal" : ""),
+          Item = item,
           Percentage = Decimal.Parse(survey[3].ToString().Split('%')[0])
         });
       }
