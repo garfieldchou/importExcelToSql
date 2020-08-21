@@ -86,8 +86,14 @@ namespace SteamData.DownloadedStatistics
     {
       foreach (DataTable table in dataSet.Tables)
       {
-        string country = table.ToString();
-        if (country == "BandWidth Data") continue;
+        if ("BandWidth Data" == table.ToString()) continue;
+
+        string country = (string)table.Rows[1][1];
+        int countryId;
+        if (!CountryIdMapping.TryGetValue(country, out countryId))
+        {
+          WriteLine($"{country} is not found in CountryList");
+        }
 
         var dlStat = new CountryDLStatOverview
         {
@@ -98,7 +104,8 @@ namespace SteamData.DownloadedStatistics
           Time = reportDate,
           TotalTb = table.Rows[4][1].ToString().ConvertTotalBytesTB(),
           AvgDlSpeedMbps = Decimal.Parse(((string)(table.Rows[4][2])).Split(' ')[0]),
-          SteamPercent = Decimal.Parse(((string)(table.Rows[4][3])).Split('%')[0])
+          SteamPercent = Decimal.Parse(((string)(table.Rows[4][3])).Split('%')[0]),
+          CountryListId = countryId
         };
 
         db.CountryDLStatOverviews.Add(dlStat);
@@ -110,10 +117,15 @@ namespace SteamData.DownloadedStatistics
     {
       foreach (DataTable table in dataSet.Tables)
       {
-        string sheetName = table.ToString();
-        if (sheetName == "BandWidth Data") continue;
+        if ("BandWidth Data" == table.ToString()) continue;
 
         string country = (string)table.Rows[1][1];
+        int countryId;
+        if (!CountryIdMapping.TryGetValue(country, out countryId))
+        {
+          WriteLine($"{country} is not found in CountryList");
+        }
+
         for (int i = 9; i < table.Rows.Count; i++)
         {
           string network = table.Rows[i][1].ToString();
@@ -121,7 +133,8 @@ namespace SteamData.DownloadedStatistics
           {
             Time = reportDate,
             Network = network,
-            AvgDlSpeedMbps = Decimal.Parse(((string)(table.Rows[i][2])).Split(' ')[0])
+            AvgDlSpeedMbps = Decimal.Parse(((string)(table.Rows[i][2])).Split(' ')[0]),
+            CountryListId = countryId
           };
           db.CountryNetworkDLStats.Add(networkDlStat);
         }
