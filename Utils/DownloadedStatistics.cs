@@ -87,7 +87,6 @@ namespace SteamData.DownloadedStatistics
           WorkWeek = reportDate.GetIso8601WeekOfYear(),
           Day = reportDate.Day,
           Time = reportDate,
-          Country = country,
           TotalTb = table.Rows[4][1].ToString().ConvertTotalBytesTB(),
           AvgDlSpeedMbps = Decimal.Parse(((string)(table.Rows[4][2])).Split(' ')[0]),
           SteamPercent = Decimal.Parse(((string)(table.Rows[4][3])).Split('%')[0])
@@ -112,7 +111,6 @@ namespace SteamData.DownloadedStatistics
           var networkDlStat = new CountryNetworkDLStat
           {
             Time = reportDate,
-            Country = country,
             Network = network,
             AvgDlSpeedMbps = Decimal.Parse(((string)(table.Rows[i][2])).Split(' ')[0])
           };
