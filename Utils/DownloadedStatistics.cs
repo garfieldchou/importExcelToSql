@@ -1,6 +1,7 @@
 using System;
 using System.Data;
 using System.Linq;
+using System.Collections.Generic;
 using static System.Console;
 using SteamData.Utils;
 
@@ -8,6 +9,7 @@ namespace SteamData.DownloadedStatistics
 {
   public static class DownloadedStatisticsUtils
   {
+    private static Dictionary<string, int> CountryIdMapping { get; set; } = new Dictionary<string, int>();
     public static void ImportCountryList(SteamDataContext db, DataSet dataSet)
     {
       int affected = 0;
@@ -27,7 +29,14 @@ namespace SteamData.DownloadedStatistics
         }
       }
       affected += db.SaveChanges();
+
       WriteLine($"{affected} items are imported");
+
+      // Populate the latest Country-ID mapping for the future uses
+      foreach (var country in db.CountryLists)
+      {
+        CountryIdMapping.Add(country.Country, country.CountryListId);
+      }
     }
     public static void ImportRegionDLStatDetail(SteamDataContext db, DataSet dataSet)
     {
