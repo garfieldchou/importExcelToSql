@@ -8,11 +8,11 @@ using static System.Console;
 
 namespace SteamData.GameRanks
 {
-  public static class GameRanksUtils
+  public class GameRanksUtils : ExcelContent
   {
-    public static void ImportOnlineStat(SteamDataContext db, DataSet dataSet)
+    public static void ImportOnlineStat(SteamDataContext db)
     {
-      var onlineStat = dataSet.Tables[0];
+      var onlineStat = content.Tables[0];
 
       DateTime[] stat = (
         from d in db.OnlineStats
@@ -44,9 +44,9 @@ namespace SteamData.GameRanks
       WriteLine($"{affected} items are imported");
     }
 
-    public static void ImportGameRanks(SteamDataContext db, DataSet dataSet, DateTime reportDate)
+    public static void ImportGameRanks(SteamDataContext db)
     {
-      var gameRank = dataSet.Tables[1];
+      var gameRank = content.Tables[1];
       var gameDetailsDict = new Dictionary<string, int>();
       IQueryable<DetailsGame> gameDetails = db.DetailsGames;
 
@@ -83,9 +83,9 @@ namespace SteamData.GameRanks
       WriteLine($"{affected} items are imported");
     }
 
-    public static void ImportDetailsGame(SteamDataContext db, DataSet dataSet)
+    public static void ImportDetailsGame(SteamDataContext db)
     {
-      var gameDetails = dataSet.Tables[2];
+      var gameDetails = content.Tables[2];
       for (int i = 1; i < gameDetails.Rows.Count; i++)
       {
         DataRow detail = gameDetails.Rows[i];

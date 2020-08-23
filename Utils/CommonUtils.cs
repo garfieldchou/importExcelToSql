@@ -5,15 +5,19 @@ using System.Data;
 using ExcelDataReader;
 namespace SteamData.Utils
 {
-  public static class CommonUtils
+  public class ExcelContent
   {
-    public static DataSet GetExcelContent(string filename)
+    protected static DataSet content { get; set; }
+    public static DateTime reportDate { get; set; }
+    public static void GetExcelContent(string filename, DateTime date)
     {
+      reportDate = date;
+
       using (var stream = File.Open(filename, FileMode.Open, FileAccess.Read))
       {
         using (var reader = ExcelReaderFactory.CreateReader(stream))
         {
-          var result = reader.AsDataSet(new ExcelDataSetConfiguration()
+          content = reader.AsDataSet(new ExcelDataSetConfiguration()
           {
             // Gets or sets a value indicating whether to set the DataColumn.DataType 
             // property in a second pass.
@@ -57,11 +61,12 @@ namespace SteamData.Utils
               }
             }
           });
-
-          return result;
         }
       }
     }
+  }
+  public static class CommonUtils
+  {
     public static int GetIso8601WeekOfYear(this DateTime time)
     {
       // Seriously cheat.  If its Monday, Tuesday or Wednesday, then it'll 

@@ -7,14 +7,14 @@ using SteamData.Utils;
 
 namespace SteamData.DownloadedStatistics
 {
-  public static class DownloadedStatisticsUtils
+  public class DownloadedStatisticsUtils : ExcelContent
   {
     private static Dictionary<string, int> CountryIdMapping { get; set; } = new Dictionary<string, int>();
-    public static void ImportCountryList(SteamDataContext db, DataSet dataSet)
+    public static void ImportCountryList(SteamDataContext db)
     {
       int affected = 0;
 
-      foreach (DataTable item in dataSet.Tables)
+      foreach (DataTable item in content.Tables)
       {
         if (item.ToString() == "BandWidth Data") continue;
 
@@ -38,9 +38,9 @@ namespace SteamData.DownloadedStatistics
         CountryIdMapping.Add(country.Country, country.CountryListId);
       }
     }
-    public static void ImportRegionDLStatDetail(SteamDataContext db, DataSet dataSet)
+    public static void ImportRegionDLStatDetail(SteamDataContext db)
     {
-      var bwDetails = dataSet.Tables[0];
+      var bwDetails = content.Tables[0];
       int columnCount = bwDetails.Columns.Count;
 
       DateTime[] detail = (
@@ -82,9 +82,9 @@ namespace SteamData.DownloadedStatistics
       int affected = db.SaveChanges();
       WriteLine($"{affected} items are imported");
     }
-    public static void ImportCountryDLStatOverview(SteamDataContext db, DataSet dataSet, DateTime reportDate)
+    public static void ImportCountryDLStatOverview(SteamDataContext db)
     {
-      foreach (DataTable table in dataSet.Tables)
+      foreach (DataTable table in content.Tables)
       {
         if ("BandWidth Data" == table.ToString()) continue;
 
@@ -113,9 +113,9 @@ namespace SteamData.DownloadedStatistics
       int affected = db.SaveChanges();
       WriteLine($"{affected} items are imported");
     }
-    public static void ImportCountryNetworkDLStat(SteamDataContext db, DataSet dataSet, DateTime reportDate)
+    public static void ImportCountryNetworkDLStat(SteamDataContext db)
     {
-      foreach (DataTable table in dataSet.Tables)
+      foreach (DataTable table in content.Tables)
       {
         if ("BandWidth Data" == table.ToString()) continue;
 

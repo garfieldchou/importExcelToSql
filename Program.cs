@@ -44,27 +44,27 @@ namespace importSteamToSql
           DateTime reportDate = DateTime.ParseExact(match.Groups[2].Captures[0].ToString(), "yyyyMMdd", null);
 
           Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-          var content = CommonUtils.GetExcelContent(fileName);
+          ExcelContent.GetExcelContent(fileName, reportDate);
 
-          ImportSteamData(category, reportDate, content);
+          ImportSteamData(category);
         }
       }
     }
 
-    static void ImportSteamData(string category, DateTime reportDate, DataSet content)
+    static void ImportSteamData(string category)
     {
       using (var steamDb = new SteamDataContext())
       {
         switch (category)
         {
           case "DownloadedStatistics":
-            ImportDownloadedStatistics(steamDb, content, reportDate);
+            ImportDownloadedStatistics(steamDb);
             break;
           case "Game Ranks":
-            ImportGameRank(steamDb, content, reportDate);
+            ImportGameRank(steamDb);
             break;
           case "HWSSurvey":
-            ImportHardwareSoftwareSurvey(steamDb, content, reportDate);
+            ImportHardwareSoftwareSurvey(steamDb);
             break;
           default:
             WriteLine("Category not found.");
@@ -73,24 +73,24 @@ namespace importSteamToSql
       }
     }
 
-    static void ImportDownloadedStatistics(SteamDataContext db, DataSet dataSet, DateTime reportDate)
+    static void ImportDownloadedStatistics(SteamDataContext db)
     {
-      ImportCountryList(db, dataSet);
-      ImportRegionDLStatDetail(db, dataSet);
-      ImportCountryDLStatOverview(db, dataSet, reportDate);
-      ImportCountryNetworkDLStat(db, dataSet, reportDate);
+      ImportCountryList(db);
+      ImportRegionDLStatDetail(db);
+      ImportCountryDLStatOverview(db);
+      ImportCountryNetworkDLStat(db);
     }
 
-    static void ImportGameRank(SteamDataContext db, DataSet dataSet, DateTime reportDate)
+    static void ImportGameRank(SteamDataContext db)
     {
-      ImportOnlineStat(db, dataSet);
-      ImportDetailsGame(db, dataSet);
-      ImportGameRanks(db, dataSet, reportDate);
+      ImportOnlineStat(db);
+      ImportDetailsGame(db);
+      ImportGameRanks(db);
     }
 
-    static void ImportHardwareSoftwareSurvey(SteamDataContext db, DataSet dataSet, DateTime reportDate)
+    static void ImportHardwareSoftwareSurvey(SteamDataContext db)
     {
-      ImportHWSurvey(db, dataSet, reportDate);
+      ImportHWSurvey(db);
     }
   }
 }

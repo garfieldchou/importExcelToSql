@@ -6,11 +6,11 @@ using static System.Console;
 
 namespace SteamData.HardwareSoftwareSurvey
 {
-  public static class HardwareSoftwareSurveyUtils
+  public class HardwareSoftwareSurveyUtils : ExcelContent
   {
-    public static void ImportHWSurvey(SteamDataContext db, DataSet dataSet, DateTime reportDate)
+    public static void ImportHWSurvey(SteamDataContext db)
     {
-      var hwsSurvey = dataSet.Tables[0];
+      var hwsSurvey = content.Tables[0];
       string category = string.Empty;
 
       for (int i = 1; i < hwsSurvey.Rows.Count; i++)
