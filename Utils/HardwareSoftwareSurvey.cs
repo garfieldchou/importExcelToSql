@@ -30,7 +30,10 @@ namespace SteamData.HardwareSoftwareSurvey
           WorkWeek = reportDate.GetIso8601WeekOfYear(),
           Day = reportDate.Day,
           Time = reportDate,
-          Category = category + (new Regex(@"^(Windows|OSX|Linux)$").IsMatch(item) ? "_SubTotal" : ""),
+          Category = category +
+            (new Regex(@"^(Windows|OSX|Linux)$").IsMatch(item)
+              && "OS Version" == category
+              ? "_SubTotal" : ""),
           Item = item,
           Percentage = Decimal.Parse(survey[3].ToString().Split('%')[0])
         });
