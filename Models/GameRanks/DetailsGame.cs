@@ -13,6 +13,7 @@ namespace SteamData.GameRanks
     public DateTime ReleaseDate { get; set; }
     public string HotTags { get; set; }
     public string SystemRequirements { get; set; }
+    public string Links { get; set; }
 
   }
 }

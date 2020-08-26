@@ -14,6 +14,7 @@ namespace SteamData.GameRanks
     public int Players { get; set; }
     public int Peak { get; set; }
     public string Game { get; set; }
+    public string Links { get; set; }
     public int DetailsGameId { get; set; }
     public virtual DetailsGame DetailsGame { get; set; }
 
