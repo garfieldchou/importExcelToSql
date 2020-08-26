@@ -107,9 +107,9 @@ namespace SteamData.Utils
 
       return unit switch
       {
-        "GB" => bytesNumber * (decimal)Math.Pow(10, 3),
-        "MB" => bytesNumber,
-        "kB" => bytesNumber * (decimal)Math.Pow(10, -3),
+        "Gbps" => bytesNumber * (decimal)Math.Pow(10, 3),
+        "Mbps" => bytesNumber,
+        "kbps" => bytesNumber * (decimal)Math.Pow(10, -3),
         _ => -1M
       };
     }
