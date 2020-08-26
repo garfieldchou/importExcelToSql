@@ -40,6 +40,14 @@ namespace SteamData
           .HasIndex(countryList => countryList.Country)
           .IsUnique();
 
+      modelBuilder.Entity<CountryDLStatOverview>()
+          .Property(st => st.TotalTb)
+          .HasColumnType("decimal(18,9)");
+
+      modelBuilder.Entity<CountryDLStatOverview>()
+          .Property(st => st.AvgDlSpeedMbps)
+          .HasColumnType("decimal(18,3)");
+
       modelBuilder.Entity<DetailsGame>()
           .HasData(new DetailsGame
           {
