@@ -98,5 +98,20 @@ namespace SteamData.Utils
         _ => -1M
       };
     }
+
+    public static decimal ConvertDlSpeedToMB(this string speed)
+    {
+      string[] numberAndUnit = speed.Split(' ');
+      decimal bytesNumber = Decimal.Parse(numberAndUnit[0]);
+      string unit = numberAndUnit[1];
+
+      return unit switch
+      {
+        "GB" => bytesNumber * (decimal)Math.Pow(10, 3),
+        "MB" => bytesNumber,
+        "kB" => bytesNumber * (decimal)Math.Pow(10, -3),
+        _ => -1M
+      };
+    }
   }
 }
