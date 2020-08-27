@@ -62,6 +62,9 @@ namespace SteamData.GameRanks
         int peak = Int32.Parse(gameRank.Rows[i][2].ToString(), AllowThousands);
         string game = gameRank.Rows[i][3].ToString();
         int gameId;
+        string link = gameRank.Columns.Count == 5
+          ? gameRank.Rows[i][4].ToString()
+          : string.Empty;
 
         if (!gameDetailsDict.TryGetValue(game, out gameId)) gameId = 1;
 
@@ -76,7 +79,8 @@ namespace SteamData.GameRanks
           Players = players,
           Peak = peak,
           Game = game,
-          DetailsGameId = gameId
+          DetailsGameId = gameId,
+          Links = link
         });
       }
       int affected = db.SaveChanges();
@@ -102,7 +106,8 @@ namespace SteamData.GameRanks
             AllReviews = detail[3].ToString(),
             ReleaseDate = releaseDate,
             HotTags = detail[5].ToString(),
-            SystemRequirements = detail[6].ToString()
+            SystemRequirements = detail[6].ToString(),
+            Links = gameDetails.Columns.Count == 8 ? detail[7].ToString() : string.Empty
           });
         }
       }
