@@ -8,7 +8,7 @@ namespace SteamData.DownloadedStatistics
     public int WorkWeek { get; set; }
     public int Day { get; set; }
     public string Region { get; set; }
-    public string Average { get; set; }
-    public string Max { get; set; }
+    public decimal Average { get; set; }
+    public decimal Max { get; set; }
   }
 }
