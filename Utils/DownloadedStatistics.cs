@@ -79,6 +79,27 @@ namespace SteamData.DownloadedStatistics
           }
         }
       }
+
+      // aggregate before save changes
+      var query = db.RegionDLStatDetails.GroupBy(
+        dt => new { dt.Year, dt.Month, dt.WorkWeek, dt.Day, dt.Country },
+        dt => dt.BandWidthGbps,
+        (key, bw) => new RegionDLStatOverview
+        {
+          Year = key.Year,
+          Month = key.Month,
+          WorkWeek = key.WorkWeek,
+          Day = key.Day,
+          Region = key.Country,
+          Average = bw.Average(),
+          Max = bw.Max()
+        });
+
+      foreach (var result in query)
+      {
+        db.RegionDLStatOverviews.Add(result);
+      }
+
       int affected = db.SaveChanges();
       WriteLine($"{affected} items are imported");
     }
