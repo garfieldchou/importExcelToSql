@@ -79,10 +79,13 @@ namespace SteamData.DownloadedStatistics
           }
         }
       }
+      int affected = db.SaveChanges();
+      WriteLine($"{affected} RegionDLStatDetail are imported");
 
       // aggregate before save changes
-      var query = db.RegionDLStatDetails.GroupBy(
-        dt => new { dt.Year, dt.Month, dt.WorkWeek, dt.Day, dt.Country },
+      var query = db.RegionDLStatDetails
+        .Where(dt => dt.Full_DateTime > latestInDB)
+        .GroupBy(dt => new { dt.Year, dt.Month, dt.WorkWeek, dt.Day, dt.Country },
         dt => dt.BandWidthGbps,
         (key, bw) => new RegionDLStatOverview
         {
@@ -99,9 +102,8 @@ namespace SteamData.DownloadedStatistics
       {
         db.RegionDLStatOverviews.Add(result);
       }
-
-      int affected = db.SaveChanges();
-      WriteLine($"{affected} items are imported");
+      affected = db.SaveChanges();
+      WriteLine($"{affected} RegionDLStatOverview are imported");
     }
     public static void ImportCountryDLStatOverview(SteamDataContext db)
     {
