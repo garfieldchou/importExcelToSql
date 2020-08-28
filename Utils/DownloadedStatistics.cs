@@ -35,7 +35,7 @@ namespace SteamData.DownloadedStatistics
       // Populate the latest Country-ID mapping for the future uses
       foreach (var country in db.CountryLists)
       {
-        CountryIdMapping.Add(country.Country, country.CountryListId);
+        CountryIdMapping.TryAdd(country.Country, country.CountryListId);
       }
     }
     public static void ImportRegionDLStatDetail(SteamDataContext db)
