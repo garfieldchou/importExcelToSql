@@ -84,7 +84,7 @@ namespace SteamData.DownloadedStatistics
 
       // aggregate before save changes
       var query = db.RegionDLStatDetails
-        .Where(dt => dt.Full_DateTime > latestInDB)
+        .Where(dt => dt.Full_DateTime.Date >= latestInDB.Date)
         .GroupBy(dt => new { dt.Year, dt.Month, dt.WorkWeek, dt.Day, dt.Country },
         dt => dt.BandWidthGbps,
         (key, bw) => new RegionDLStatOverview
