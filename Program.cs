@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Data;
-using static System.IO.File;
+using System.IO;
+using System.Linq;
 using static System.Console;
 using SteamData;
 using SteamData.Utils;
@@ -14,16 +14,9 @@ namespace importSteamToSql
 {
   class Program
   {
-    static void Main(string[] args)
+    static void ImportXlsxFile(string fileName)
     {
-      if (args.Length != 1)
-      {
-        WriteLine("Usage: importSteamToSql.exe xxx.xlsx");
-        return;
-      }
-
-      string fileName = args[0];
-      var fileNameChecker = new Regex(@"(DownloadedStatistics|GameRanks|HWSSurvey)_(\d{8}).xlsx$");
+      var fileNameChecker = new Regex(@"(DownloadedStatistics|GameRanks|HWSSurvey|Hardware_Software)_(\d{8}).xlsx$");
       Match match = fileNameChecker.Match(fileName);
 
       if (match == Match.Empty)
@@ -33,7 +26,7 @@ namespace importSteamToSql
       }
       else
       {
-        if (!Exists(fileName))
+        if (!File.Exists(fileName))
         {
           WriteLine("File does not exist.");
           return;
@@ -51,6 +44,17 @@ namespace importSteamToSql
       }
     }
 
+    static void Main(string[] args)
+    {
+      var files = Directory.EnumerateFiles("../spec/Steam_20200826", "*.xlsx", SearchOption.AllDirectories).OrderBy(file => file);
+
+      foreach (var item in files)
+      {
+        WriteLine($"Handling {item}");
+        ImportXlsxFile(item);
+      }
+    }
+
     static void ImportSteamData(string category)
     {
       using (var steamDb = new SteamDataContext())
@@ -64,6 +68,7 @@ namespace importSteamToSql
             ImportGameRank(steamDb);
             break;
           case "HWSSurvey":
+          case "Hardware_Software":
             ImportHardwareSoftwareSurvey(steamDb);
             break;
           default:
