@@ -31,7 +31,7 @@ namespace SteamData
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
       optionsBuilder.UseSqlServer(
-        @"Server=APZA001GOD;Database=Steam;Integrated Security=True");
+        @"Server=APZA001GOD;Database=Steam;Integrated Security=True;MultipleActiveResultSets=true");
     }
     protected override void OnModelCreating(
       ModelBuilder modelBuilder)

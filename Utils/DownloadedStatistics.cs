@@ -100,7 +100,19 @@ namespace SteamData.DownloadedStatistics
 
       foreach (var result in query)
       {
-        db.RegionDLStatOverviews.Add(result);
+        var overview = db.RegionDLStatOverviews.FirstOrDefault(ov =>
+          ov.Year == result.Year &&
+          ov.Month == result.Month &&
+          ov.Day == result.Day &&
+          ov.Region == result.Region);
+
+        if (overview == null)
+          db.RegionDLStatOverviews.Add(result);
+        else
+        {
+          overview.Average = result.Average;
+          overview.Max = result.Max;
+        }
       }
       affected = db.SaveChanges();
       WriteLine($"{affected} RegionDLStatOverview are imported");
