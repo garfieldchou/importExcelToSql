@@ -1,9 +1,7 @@
 using System;
 
-namespace SteamData.HardwareSoftwareSurvey
-{
-  public class ProceUsageDetail
-  {
+namespace SteamData.HardwareSoftwareSurvey {
+  public class ProceUsageDetail {
     public int ProceUsageDetailId { get; set; }
     public int Year { get; set; }
     public int Month { get; set; }

@@ -1,9 +1,7 @@
 using System;
 
-namespace SteamData.HardwareSoftwareSurvey
-{
-  public class PCVideoCardUsageDetail
-  {
+namespace SteamData.HardwareSoftwareSurvey {
+  public class PCVideoCardUsageDetail {
     public int PCVideoCardUsageDetailId { get; set; }
     public int Year { get; set; }
     public int Month { get; set; }

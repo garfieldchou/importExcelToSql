@@ -1,9 +1,7 @@
 using System;
 
-namespace SteamData.HardwareSoftwareSurvey
-{
-  public class HWSurvey
-  {
+namespace SteamData.HardwareSoftwareSurvey {
+  public class HWSurvey {
     public int HWSurveyId { get; set; }
     public int Year { get; set; }
     public int Month { get; set; }

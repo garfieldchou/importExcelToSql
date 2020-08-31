@@ -1,9 +1,7 @@
 using System;
 
-namespace SteamData.DownloadedStatistics
-{
-  public class CountryDLStatOverview
-  {
+namespace SteamData.DownloadedStatistics {
+  public class CountryDLStatOverview {
     public int CountryDLStatOverviewId { get; set; }
     public int Year { get; set; }
     public int Month { get; set; }

@@ -1,7 +1,5 @@
-namespace SteamData.DownloadedStatistics
-{
-  public class RegionDLStatOverview
-  {
+namespace SteamData.DownloadedStatistics {
+  public class RegionDLStatOverview {
     public int RegionDLStatOverviewId { get; set; }
     public int Year { get; set; }
     public int Month { get; set; }

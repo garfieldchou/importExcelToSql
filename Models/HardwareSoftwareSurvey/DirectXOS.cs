@@ -1,9 +1,7 @@
 using System;
 
-namespace SteamData.HardwareSoftwareSurvey
-{
-  public class DirectXOS
-  {
+namespace SteamData.HardwareSoftwareSurvey {
+  public class DirectXOS {
     public int DirectXOSId { get; set; }
     public int Year { get; set; }
     public int Month { get; set; }

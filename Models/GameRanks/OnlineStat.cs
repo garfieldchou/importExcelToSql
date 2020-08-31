@@ -1,9 +1,7 @@
 using System;
 
-namespace SteamData.GameRanks
-{
-  public class OnlineStat
-  {
+namespace SteamData.GameRanks {
+  public class OnlineStat {
     public int OnlineStatId { get; set; }
     public int Year { get; set; }
     public int Month { get; set; }

@@ -1,9 +1,7 @@
 using System;
 
-namespace SteamData.GameRanks
-{
-  public class DetailsGame
-  {
+namespace SteamData.GameRanks {
+  public class DetailsGame {
     public int DetailsGameId { get; set; }
 
     public string Game { get; set; }
