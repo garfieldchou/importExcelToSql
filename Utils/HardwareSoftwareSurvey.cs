@@ -3,6 +3,8 @@ using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Microsoft.EntityFrameworkCore;
+using SteamData.HardwareSoftwareSurvey;
 using SteamData.Utils;
 using static System.Console;
 
@@ -39,7 +41,14 @@ namespace SteamData.HardwareSoftwareSurvey {
     }
 
     public static void ImportPCVideoCardUsageDetail (SteamDataContext db) {
-      var usageDetails = content.Tables[1];
+      ImportUsageDetail (db.PCVideoCardUsageDetails, content.Tables[1]);
+      int affected = db.SaveChanges ();
+      WriteLine ($"{affected} PCVideoCardUsageDetail are imported");
+    }
+
+    private static void ImportUsageDetail<T> (DbSet<T> set, DataTable usageDetails)
+    where T : class, ISurveyDetail, new () {
+
       int monthStart = usageDetails.Rows[0][2].ToString ().MonthStringToInt ();
       int startYear = reportDate.Year;
       string category = usageDetails.Rows[0][1].ToString ();
@@ -49,7 +58,7 @@ namespace SteamData.HardwareSoftwareSurvey {
       if (monthStart > 8) startYear -= 1;
 
       var detailInDb = (
-        from d in db.PCVideoCardUsageDetails orderby d.Year descending, d.Month descending select d).FirstOrDefault ();
+        from d in set orderby d.Year descending, d.Month descending select d).FirstOrDefault ();
 
       if (detailInDb != null) {
         latestYearInDb = detailInDb.Year;
@@ -93,7 +102,7 @@ namespace SteamData.HardwareSoftwareSurvey {
 
           WriteLine ($"row {i}: {year}-{month}-{item}-{percentage}");
 
-          db.PCVideoCardUsageDetails.Add (new PCVideoCardUsageDetail {
+          set.Add (new T {
             Year = year,
               Month = month,
               Category = category,
@@ -103,8 +112,6 @@ namespace SteamData.HardwareSoftwareSurvey {
         }
         WriteLine ($"==============");
       }
-      int affected = db.SaveChanges ();
-      WriteLine ($"{affected} PCVideoCardUsageDetail are imported");
     }
   }
 }
