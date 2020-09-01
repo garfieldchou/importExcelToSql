@@ -46,6 +46,24 @@ namespace SteamData.HardwareSoftwareSurvey {
       WriteLine ($"{affected} PCVideoCardUsageDetail are imported");
     }
 
+    public static void ImportDirectXOS (SteamDataContext db) {
+      ImportUsageDetail (db.DirectXOSs, content.Tables[2]);
+      int affected = db.SaveChanges ();
+      WriteLine ($"{affected} DirectXOS are imported");
+    }
+
+    public static void ImportProceUsageDetail (SteamDataContext db) {
+      ImportUsageDetail (db.ProceUsageDetails, content.Tables[3]);
+      int affected = db.SaveChanges ();
+      WriteLine ($"{affected} ProceUsageDetail are imported");
+    }
+
+    public static void ImportPcPhyCpuDetail (SteamDataContext db) {
+      ImportUsageDetail (db.PcPhyCpuDetails, content.Tables[4]);
+      int affected = db.SaveChanges ();
+      WriteLine ($"{affected} PcPhyCpuDetail are imported");
+    }
+
     private static void ImportUsageDetail<T> (DbSet<T> set, DataTable usageDetails)
     where T : class, ISurveyDetail, new () {
 

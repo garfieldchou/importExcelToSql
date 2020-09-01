@@ -75,6 +75,10 @@ namespace importSteamToSql {
 
     static void ImportHardwareSoftwareSurvey (SteamDataContext db) {
       ImportHWSurvey (db);
+      ImportPCVideoCardUsageDetail (db);
+      ImportDirectXOS (db);
+      ImportProceUsageDetail (db);
+      ImportPcPhyCpuDetail (db);
     }
   }
 }
