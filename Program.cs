@@ -19,7 +19,7 @@ namespace importSteamToSql {
       }
 
       string fileName = args[0];
-      var fileNameChecker = new Regex (@"(DownloadedStatistics|GameRanks|HWSSurvey)_(\d{8}).xlsx$");
+      var fileNameChecker = new Regex (@"(DownloadedStatistics|GameRanks|HWSSurvey|Hardware_Software)_(\d{8}).xlsx$");
       Match match = fileNameChecker.Match (fileName);
 
       if (match == Match.Empty) {
@@ -51,6 +51,7 @@ namespace importSteamToSql {
             ImportGameRank (steamDb);
             break;
           case "HWSSurvey":
+          case "Hardware_Software":
             ImportHardwareSoftwareSurvey (steamDb);
             break;
           default:
