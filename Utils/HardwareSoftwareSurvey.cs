@@ -244,5 +244,74 @@ namespace SteamData.HardwareSoftwareSurvey {
       int affected = db.SaveChanges ();
       WriteLine ($"{affected} ProceUsageDetail are imported");
     }
+
+    public static void ImportPcPhyCpuDetail (SteamDataContext db) {
+      var usageDetails = content.Tables[4];
+      int monthStart = usageDetails.Rows[0][2].ToString ().MonthStringToInt ();
+      int startYear = reportDate.Year;
+      string category = usageDetails.Rows[0][1].ToString ();
+      int latestYearInDb = int.MinValue;
+      int latestYearMonthInDb = int.MinValue;
+
+      if (monthStart > 8) startYear -= 1;
+
+      var detailInDb = (
+        from d in db.PcPhyCpuDetails orderby d.Year descending, d.Month descending select d).FirstOrDefault ();
+
+      if (detailInDb != null) {
+        latestYearInDb = detailInDb.Year;
+        latestYearMonthInDb = detailInDb.Month;
+      }
+
+      WriteLine ($"{ latestYearInDb }, { latestYearMonthInDb }");
+
+      WriteLine ($"**********");
+      WriteLine ($"{category}");
+      WriteLine ($"**********");
+
+      for (int i = 1; i < usageDetails.Rows.Count; i++) {
+        DataRow detail = usageDetails.Rows[i];
+
+        if (detail[0].ToString () == string.Empty) {
+          if (detail[1].ToString () != string.Empty) {
+            category = detail[1].ToString ();
+            WriteLine ($"**********");
+            WriteLine ($"{category}");
+            WriteLine ($"**********");
+          }
+          continue;
+        }
+        string item = detail[1].ToString ();
+
+        for (int col = 2; col < 7; col++) {
+          decimal percentage;
+          if (!Decimal.TryParse (
+              detail[col].ToString ().Split ('%') [0],
+              NumberStyles.AllowDecimalPoint,
+              CultureInfo.CurrentCulture,
+              out percentage)) continue;
+
+          int month = monthStart + col - 2;
+          int year = month > 12 ? startYear + 1 : startYear;
+          month = month > 12 ? month - 12 : month;
+
+          if (year < latestYearInDb ||
+            (year == latestYearInDb && month <= latestYearMonthInDb)) continue;
+
+          WriteLine ($"row {i}: {year}-{month}-{item}-{percentage}");
+
+          db.PcPhyCpuDetails.Add (new PcPhyCpuDetail {
+            Year = year,
+              Month = month,
+              Category = category,
+              Item = item,
+              Percentage = percentage
+          });
+        }
+        WriteLine ($"==============");
+      }
+      int affected = db.SaveChanges ();
+      WriteLine ($"{affected} PcPhyCpuDetail are imported");
+    }
   }
 }
