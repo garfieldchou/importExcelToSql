@@ -22,7 +22,11 @@ namespace importSteamToSql {
     [Argument (0, Description = "xlsx file to be imported or the path containing those files")]
     private string fileOrDirtPath { get; } = Directory.GetCurrentDirectory ();
 
+    [Option ("-w|--watch", Description = "Watch new files and import")]
+    private bool watchMode { get; } = false;
+
     private void OnExecute (CommandLineApplication app, CancellationToken cancellationToken = default) {
+      WriteLine ($"watch mode: {watchMode}");
       try {
         ImportSteamFromDirectory (fileOrDirtPath);
       } catch (Exception) {
