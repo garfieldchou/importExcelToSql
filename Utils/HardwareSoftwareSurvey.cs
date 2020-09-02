@@ -37,31 +37,31 @@ namespace SteamData.HardwareSoftwareSurvey {
         });
       }
       int affected = db.SaveChanges ();
-      WriteLine ($"{affected} items are imported");
+      WriteLine (string.Format ("{0,-24}| import {1,6:N0} items", "HWSurvey", affected));
     }
 
     public static void ImportPCVideoCardUsageDetail (SteamDataContext db) {
       ImportUsageDetail (db.PCVideoCardUsageDetails, content.Tables[1]);
       int affected = db.SaveChanges ();
-      WriteLine ($"{affected} PCVideoCardUsageDetail are imported");
+      WriteLine (string.Format ("{0,-24}| import {1,6:N0} items", "PCVideoCardUsageDetail", affected));
     }
 
     public static void ImportDirectXOS (SteamDataContext db) {
       ImportUsageDetail (db.DirectXOSs, content.Tables[2]);
       int affected = db.SaveChanges ();
-      WriteLine ($"{affected} DirectXOS are imported");
+      WriteLine (string.Format ("{0,-24}| import {1,6:N0} items", "DirectXOS", affected));
     }
 
     public static void ImportProceUsageDetail (SteamDataContext db) {
       ImportUsageDetail (db.ProceUsageDetails, content.Tables[3]);
       int affected = db.SaveChanges ();
-      WriteLine ($"{affected} ProceUsageDetail are imported");
+      WriteLine (string.Format ("{0,-24}| import {1,6:N0} items", "ProceUsageDetail", affected));
     }
 
     public static void ImportPcPhyCpuDetail (SteamDataContext db) {
       ImportUsageDetail (db.PcPhyCpuDetails, content.Tables[4]);
       int affected = db.SaveChanges ();
-      WriteLine ($"{affected} PcPhyCpuDetail are imported");
+      WriteLine (string.Format ("{0,-24}| import {1,6:N0} items", "PcPhyCpuDetail", affected));
     }
 
     private static void ImportUsageDetail<T> (DbSet<T> set, DataTable usageDetails)

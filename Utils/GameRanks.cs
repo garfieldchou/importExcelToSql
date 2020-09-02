@@ -34,7 +34,7 @@ namespace SteamData.GameRanks {
         }
       }
       int affected = db.SaveChanges ();
-      WriteLine ($"{affected} items are imported");
+      WriteLine (string.Format ("{0,-24}| import {1,6:N0} items", "OnlineStat", affected));
     }
 
     public static void ImportGameRanks (SteamDataContext db) {
@@ -73,7 +73,7 @@ namespace SteamData.GameRanks {
         });
       }
       int affected = db.SaveChanges ();
-      WriteLine ($"{affected} items are imported");
+      WriteLine (string.Format ("{0,-24}| import {1,6:N0} items", "GameRank", affected));
     }
 
     public static void ImportDetailsGame (SteamDataContext db) {
@@ -97,7 +97,7 @@ namespace SteamData.GameRanks {
         }
       }
       int affected = db.SaveChanges ();
-      WriteLine ($"{affected} items are imported");
+      WriteLine (string.Format ("{0,-24}| import {1,6:N0} items", "DetailsGame", affected));
     }
   }
 }
