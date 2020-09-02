@@ -73,6 +73,7 @@ namespace importSteamToSql {
             ImportGameRank (steamDb);
             break;
           case "HWSSurvey":
+          case "Hardware_Software":
             ImportHardwareSoftwareSurvey (steamDb);
             break;
           default:
