@@ -57,25 +57,28 @@ namespace importSteamToSql {
           DateTime reportDate = DateTime.ParseExact (match.Groups[2].Captures[0].ToString (), "yyyyMMdd", null);
 
           Encoding.RegisterProvider (CodePagesEncodingProvider.Instance);
-          ExcelContent.GetExcelContent (fileName, reportDate);
+          // ExcelContent.GetExcelContent (fileName, reportDate);
 
-          ImportSteamData (category);
+          // var downloadStatistics = new DownloadStatistics(DataSet ds);
+          // downloadStatistics.ImportTo(db);
+
+          ImportSteamData (category, fileName, reportDate);
         }
       }
     }
 
-    static void ImportSteamData (string category) {
+    static void ImportSteamData (string category, string filename, DateTime reportDate) {
       using (var steamDb = new SteamDataContext ()) {
         switch (category) {
           case "DownloadedStatistics":
-            steamDb.ImportDownloadedStatistics ();
+            steamDb.ImportDownloadedStatistics (filename, reportDate);
             break;
           case "GameRanks":
-            steamDb.ImportGameRank ();
+            // steamDb.ImportGameRank ();
             break;
           case "HWSSurvey":
           case "Hardware_Software":
-            steamDb.ImportHardwareSoftwareSurvey ();
+            // steamDb.ImportHardwareSoftwareSurvey ();
             break;
           default:
             WriteLine ("Category not found.");
