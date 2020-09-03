@@ -51,12 +51,11 @@ namespace SteamData.GameRanks {
         int players = Int32.Parse (gameRank.Rows[i][1].ToString (), AllowThousands);
         int peak = Int32.Parse (gameRank.Rows[i][2].ToString (), AllowThousands);
         string game = gameRank.Rows[i][3].ToString ();
-        int gameId;
         string link = gameRank.Columns.Count == 5 ?
           gameRank.Rows[i][4].ToString () :
           string.Empty;
 
-        if (!gameDetailsDict.TryGetValue (game, out gameId)) gameId = 1;
+        if (!gameDetailsDict.TryGetValue (game, out int gameId)) gameId = 1;
 
         db.GameRanks.Add (new GameRank {
           Year = reportDate.Year,

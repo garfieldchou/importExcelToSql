@@ -104,12 +104,11 @@ namespace SteamData.HardwareSoftwareSurvey {
         string item = detail[1].ToString ();
 
         for (int col = 2; col < 7; col++) {
-          decimal percentage;
           if (!Decimal.TryParse (
               detail[col].ToString ().Split ('%') [0],
               NumberStyles.AllowDecimalPoint,
               CultureInfo.CurrentCulture,
-              out percentage)) continue;
+              out decimal percentage)) continue;
 
           int month = monthStart + col - 2;
           int year = month > 12 ? startYear + 1 : startYear;

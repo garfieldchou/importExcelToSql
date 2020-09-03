@@ -106,8 +106,7 @@ namespace SteamData.DownloadedStatistics {
         if ("BandWidth Data" == table.ToString ()) continue;
 
         string country = (string) table.Rows[1][1];
-        int countryId;
-        if (!CountryIdMapping.TryGetValue (country, out countryId)) {
+        if (!CountryIdMapping.TryGetValue (country, out int countryId)) {
           WriteLine ($"{country} is not found in CountryList");
         }
 
@@ -133,8 +132,7 @@ namespace SteamData.DownloadedStatistics {
         if ("BandWidth Data" == table.ToString ()) continue;
 
         string country = (string) table.Rows[1][1];
-        int countryId;
-        if (!CountryIdMapping.TryGetValue (country, out countryId)) {
+        if (!CountryIdMapping.TryGetValue (country, out int countryId)) {
           WriteLine ($"{country} is not found in CountryList");
         }
 
