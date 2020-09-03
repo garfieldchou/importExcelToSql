@@ -16,7 +16,7 @@ namespace importSteamToSql {
   class Program {
     static void Main (string[] args) => CommandLineApplication.Execute<Program> (args);
 
-    [Argument (0, Description = "xlsx file to be imported or the path containing those files")]
+    [Argument (0, Description = "Specify xlsx file to be imported or the directory containing those files\n default: current directory")]
     private string fileOrDirtPath { get; } = Directory.GetCurrentDirectory ();
 
     [Option ("-w|--watch", Description = "Watch new files and import")]
