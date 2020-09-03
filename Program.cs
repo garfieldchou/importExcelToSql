@@ -6,12 +6,9 @@ using System.Text.RegularExpressions;
 using static System.Console;
 using System.Linq;
 using System.Threading;
+using McMaster.Extensions.CommandLineUtils;
 using SteamData;
 using SteamData.Utils;
-using static SteamData.DownloadedStatistics.DownloadedStatisticsUtils;
-using static SteamData.GameRanks.GameRanksUtils;
-using static SteamData.HardwareSoftwareSurvey.HardwareSoftwareSurveyUtils;
-using McMaster.Extensions.CommandLineUtils;
 
 namespace importSteamToSql {
   [Command (Name = "importSteamToSql", Description = "Import Steam data from xlsx to MS SQL server")]
@@ -71,41 +68,20 @@ namespace importSteamToSql {
       using (var steamDb = new SteamDataContext ()) {
         switch (category) {
           case "DownloadedStatistics":
-            ImportDownloadedStatistics (steamDb);
+            steamDb.ImportDownloadedStatistics ();
             break;
           case "GameRanks":
-            ImportGameRank (steamDb);
+            steamDb.ImportGameRank ();
             break;
           case "HWSSurvey":
           case "Hardware_Software":
-            ImportHardwareSoftwareSurvey (steamDb);
+            steamDb.ImportHardwareSoftwareSurvey ();
             break;
           default:
             WriteLine ("Category not found.");
             break;
         }
       }
-    }
-
-    static void ImportDownloadedStatistics (SteamDataContext db) {
-      ImportCountryList (db);
-      ImportRegionDLStatDetail (db);
-      ImportCountryDLStatOverview (db);
-      ImportCountryNetworkDLStat (db);
-    }
-
-    static void ImportGameRank (SteamDataContext db) {
-      ImportOnlineStat (db);
-      ImportDetailsGame (db);
-      ImportGameRanks (db);
-    }
-
-    static void ImportHardwareSoftwareSurvey (SteamDataContext db) {
-      ImportHWSurvey (db);
-      ImportPCVideoCardUsageDetail (db);
-      ImportDirectXOS (db);
-      ImportProceUsageDetail (db);
-      ImportPcPhyCpuDetail (db);
     }
   }
 }

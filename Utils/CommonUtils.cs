@@ -4,6 +4,10 @@ using System.Data;
 using System.Globalization;
 using System.IO;
 using ExcelDataReader;
+using static SteamData.DownloadedStatistics.DownloadedStatisticsUtils;
+using static SteamData.GameRanks.GameRanksUtils;
+using static SteamData.HardwareSoftwareSurvey.HardwareSoftwareSurveyUtils;
+
 namespace SteamData.Utils {
   public class ExcelContent {
     protected static DataSet content { get; set; }
@@ -113,5 +117,26 @@ namespace SteamData.Utils {
       { "NOV", 11 },
       { "DEC", 12 }
     }[month];
+  }
+
+  public static class DbContextExtensions {
+    public static void ImportDownloadedStatistics (this SteamDataContext db) {
+      ImportCountryList (db);
+      ImportRegionDLStatDetail (db);
+      ImportCountryDLStatOverview (db);
+      ImportCountryNetworkDLStat (db);
+    }
+    public static void ImportGameRank (this SteamDataContext db) {
+      ImportOnlineStat (db);
+      ImportDetailsGame (db);
+      ImportGameRanks (db);
+    }
+    public static void ImportHardwareSoftwareSurvey (this SteamDataContext db) {
+      ImportHWSurvey (db);
+      ImportPCVideoCardUsageDetail (db);
+      ImportDirectXOS (db);
+      ImportProceUsageDetail (db);
+      ImportPcPhyCpuDetail (db);
+    }
   }
 }
