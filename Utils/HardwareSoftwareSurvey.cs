@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
-using SteamData.HardwareSoftwareSurvey;
 using SteamData.Utils;
 using static System.Console;
 
