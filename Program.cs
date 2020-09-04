@@ -1,5 +1,4 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -54,31 +53,9 @@ namespace importSteamToSql {
         return;
       }
       Encoding.RegisterProvider (CodePagesEncodingProvider.Instance);
-      ImportSteamData (fileName);
-    }
-
-    static void ImportSteamData (string fileName) {
-      string category =
-        new Regex (@"(DownloadedStatistics|GameRanks|HWSSurvey|Hardware_Software)_\d{8}.xlsx$")
-        .Match (fileName).Groups[1].Captures[0]
-        .ToString ();
 
       using (var steamDb = new SteamDataContext ()) {
-        switch (category) {
-          case "DownloadedStatistics":
-            steamDb.ImportDownloadedStatistics (fileName);
-            break;
-          case "GameRanks":
-            steamDb.ImportGameRank (fileName);
-            break;
-          case "HWSSurvey":
-          case "Hardware_Software":
-            steamDb.ImportHardwareSoftwareSurvey (fileName);
-            break;
-          default:
-            WriteLine ("Category not found.");
-            break;
-        }
+        steamDb.ImportSteamDataFrom (fileName);
       }
     }
   }

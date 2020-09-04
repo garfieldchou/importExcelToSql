@@ -8,6 +8,7 @@ using ExcelDataReader;
 using SteamData.DownloadedStatistics;
 using SteamData.GameRanks;
 using SteamData.HardwareSoftwareSurvey;
+using static System.Console;
 
 namespace SteamData.Utils {
   public class ExcelContent {
@@ -142,6 +143,29 @@ namespace SteamData.Utils {
     public static void ImportHardwareSoftwareSurvey (this SteamDataContext db, string fileName) {
       using (var hardwareSoftwareSurvey = new HardwareSoftwareSurveyUtils (fileName)) {
         hardwareSoftwareSurvey.ImportTo (db);
+      }
+    }
+
+    public static void ImportSteamDataFrom (this SteamDataContext db, string fileName) {
+      string category =
+        new Regex (@"(DownloadedStatistics|GameRanks|HWSSurvey|Hardware_Software)_\d{8}.xlsx$")
+        .Match (fileName).Groups[1].Captures[0]
+        .ToString ();
+
+      switch (category) {
+        case "DownloadedStatistics":
+          db.ImportDownloadedStatistics (fileName);
+          break;
+        case "GameRanks":
+          db.ImportGameRank (fileName);
+          break;
+        case "HWSSurvey":
+        case "Hardware_Software":
+          db.ImportHardwareSoftwareSurvey (fileName);
+          break;
+        default:
+          WriteLine ("Category not found.");
+          break;
       }
     }
   }
