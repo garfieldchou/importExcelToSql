@@ -14,7 +14,7 @@ namespace SteamData.HardwareSoftwareSurvey {
       GetExcelContent (filename);
     }
 
-    public void ImportHWSurvey (SteamDataContext db) {
+    private void ImportHWSurvey (SteamDataContext db) {
       var hwsSurvey = content.Tables[0];
       string category = string.Empty;
 
@@ -44,25 +44,25 @@ namespace SteamData.HardwareSoftwareSurvey {
       WriteLine (string.Format ("{0,-24}| import {1,6:N0} items", "HWSurvey", affected));
     }
 
-    public void ImportPCVideoCardUsageDetail (SteamDataContext db) {
+    private void ImportPCVideoCardUsageDetail (SteamDataContext db) {
       ImportUsageDetail (db.PCVideoCardUsageDetails, content.Tables[1]);
       int affected = db.SaveChanges ();
       WriteLine (string.Format ("{0,-24}| import {1,6:N0} items", "PCVideoCardUsageDetail", affected));
     }
 
-    public void ImportDirectXOS (SteamDataContext db) {
+    private void ImportDirectXOS (SteamDataContext db) {
       ImportUsageDetail (db.DirectXOSs, content.Tables[2]);
       int affected = db.SaveChanges ();
       WriteLine (string.Format ("{0,-24}| import {1,6:N0} items", "DirectXOS", affected));
     }
 
-    public void ImportProceUsageDetail (SteamDataContext db) {
+    private void ImportProceUsageDetail (SteamDataContext db) {
       ImportUsageDetail (db.ProceUsageDetails, content.Tables[3]);
       int affected = db.SaveChanges ();
       WriteLine (string.Format ("{0,-24}| import {1,6:N0} items", "ProceUsageDetail", affected));
     }
 
-    public void ImportPcPhyCpuDetail (SteamDataContext db) {
+    private void ImportPcPhyCpuDetail (SteamDataContext db) {
       ImportUsageDetail (db.PcPhyCpuDetails, content.Tables[4]);
       int affected = db.SaveChanges ();
       WriteLine (string.Format ("{0,-24}| import {1,6:N0} items", "PcPhyCpuDetail", affected));
@@ -134,6 +134,15 @@ namespace SteamData.HardwareSoftwareSurvey {
         WriteLine ($"==============");
       }
     }
+
+    public override void ImportTo (SteamDataContext db) {
+      ImportHWSurvey (db);
+      ImportPCVideoCardUsageDetail (db);
+      ImportDirectXOS (db);
+      ImportProceUsageDetail (db);
+      ImportPcPhyCpuDetail (db);
+    }
+
     public void Dispose () { }
   }
 }

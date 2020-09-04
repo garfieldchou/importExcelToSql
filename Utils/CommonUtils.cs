@@ -64,6 +64,8 @@ namespace SteamData.Utils {
         }
       }
     }
+
+    public virtual void ImportTo (SteamDataContext db) { }
   }
   public static class CommonUtils {
     public static int GetIso8601WeekOfYear (this DateTime time) {
@@ -127,26 +129,19 @@ namespace SteamData.Utils {
   public static class DbContextExtensions {
     public static void ImportDownloadedStatistics (this SteamDataContext db, string fileName) {
       using (var downloadedStatistics = new DownloadedStatisticsUtils (fileName)) {
-        downloadedStatistics.ImportCountryList (db);
-        downloadedStatistics.ImportRegionDLStatDetail (db);
-        downloadedStatistics.ImportCountryDLStatOverview (db);
-        downloadedStatistics.ImportCountryNetworkDLStat (db);
+        downloadedStatistics.ImportTo (db);
       }
     }
+
     public static void ImportGameRank (this SteamDataContext db, string fileName) {
       using (var gameRank = new GameRanksUtils (fileName)) {
-        gameRank.ImportOnlineStat (db);
-        gameRank.ImportDetailsGame (db);
-        gameRank.ImportGameRanks (db);
+        gameRank.ImportTo (db);
       }
     }
+
     public static void ImportHardwareSoftwareSurvey (this SteamDataContext db, string fileName) {
       using (var hardwareSoftwareSurvey = new HardwareSoftwareSurveyUtils (fileName)) {
-        hardwareSoftwareSurvey.ImportHWSurvey (db);
-        hardwareSoftwareSurvey.ImportPCVideoCardUsageDetail (db);
-        hardwareSoftwareSurvey.ImportDirectXOS (db);
-        hardwareSoftwareSurvey.ImportProceUsageDetail (db);
-        hardwareSoftwareSurvey.ImportPcPhyCpuDetail (db);
+        hardwareSoftwareSurvey.ImportTo (db);
       }
     }
   }

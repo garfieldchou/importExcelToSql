@@ -12,7 +12,7 @@ namespace SteamData.GameRanks {
       GetExcelContent (filename);
     }
 
-    public void ImportOnlineStat (SteamDataContext db) {
+    private void ImportOnlineStat (SteamDataContext db) {
       var onlineStat = content.Tables[0];
 
       DateTime[] stat = (
@@ -41,7 +41,7 @@ namespace SteamData.GameRanks {
       WriteLine (string.Format ("{0,-24}| import {1,6:N0} items", "OnlineStat", affected));
     }
 
-    public void ImportGameRanks (SteamDataContext db) {
+    private void ImportGameRanks (SteamDataContext db) {
       var gameRank = content.Tables[1];
       var gameDetailsDict = new Dictionary<string, int> ();
       IQueryable<DetailsGame> gameDetails = db.DetailsGames;
@@ -79,7 +79,7 @@ namespace SteamData.GameRanks {
       WriteLine (string.Format ("{0,-24}| import {1,6:N0} items", "GameRank", affected));
     }
 
-    public void ImportDetailsGame (SteamDataContext db) {
+    private void ImportDetailsGame (SteamDataContext db) {
       var gameDetails = content.Tables[2];
       for (int i = 1; i < gameDetails.Rows.Count; i++) {
         DataRow detail = gameDetails.Rows[i];
@@ -101,6 +101,12 @@ namespace SteamData.GameRanks {
       }
       int affected = db.SaveChanges ();
       WriteLine (string.Format ("{0,-24}| import {1,6:N0} items", "DetailsGame", affected));
+    }
+
+    public override void ImportTo (SteamDataContext db) {
+      ImportOnlineStat (db);
+      ImportDetailsGame (db);
+      ImportGameRanks (db);
     }
 
     public void Dispose () { }

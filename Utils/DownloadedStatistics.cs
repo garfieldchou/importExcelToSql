@@ -11,7 +11,7 @@ namespace SteamData.DownloadedStatistics {
       GetExcelContent (filename);
     }
     private Dictionary<string, int> CountryIdMapping { get; set; } = new Dictionary<string, int> ();
-    public void ImportCountryList (SteamDataContext db) {
+    private void ImportCountryList (SteamDataContext db) {
       int affected = 0;
 
       foreach (DataTable item in content.Tables) {
@@ -34,7 +34,7 @@ namespace SteamData.DownloadedStatistics {
         CountryIdMapping.TryAdd (country.Country, country.CountryListId);
       }
     }
-    public void ImportRegionDLStatDetail (SteamDataContext db) {
+    private void ImportRegionDLStatDetail (SteamDataContext db) {
       var bwDetails = content.Tables[0];
       int columnCount = bwDetails.Columns.Count;
 
@@ -104,7 +104,7 @@ namespace SteamData.DownloadedStatistics {
       affected = db.SaveChanges ();
       WriteLine (string.Format ("{0,-24}| import {1,6:N0} items", "RegionDLStatOverview", affected));
     }
-    public void ImportCountryDLStatOverview (SteamDataContext db) {
+    private void ImportCountryDLStatOverview (SteamDataContext db) {
       foreach (DataTable table in content.Tables) {
         if ("BandWidth Data" == table.ToString ()) continue;
 
@@ -130,7 +130,7 @@ namespace SteamData.DownloadedStatistics {
       int affected = db.SaveChanges ();
       WriteLine (string.Format ("{0,-24}| import {1,6:N0} items", "CountryDLStatOverview", affected));
     }
-    public void ImportCountryNetworkDLStat (SteamDataContext db) {
+    private void ImportCountryNetworkDLStat (SteamDataContext db) {
       foreach (DataTable table in content.Tables) {
         if ("BandWidth Data" == table.ToString ()) continue;
 
@@ -152,6 +152,13 @@ namespace SteamData.DownloadedStatistics {
       }
       int affected = db.SaveChanges ();
       WriteLine (string.Format ("{0,-24}| import {1,6:N0} items", "CountryNetworkDLStat", affected));
+    }
+
+    public override void ImportTo (SteamDataContext db) {
+      ImportCountryList (db);
+      ImportRegionDLStatDetail (db);
+      ImportCountryDLStatOverview (db);
+      ImportCountryNetworkDLStat (db);
     }
 
     public void Dispose () { }
