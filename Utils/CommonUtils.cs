@@ -9,6 +9,7 @@ using SteamData.DownloadedStatistics;
 using SteamData.GameRanks;
 using SteamData.HardwareSoftwareSurvey;
 using static System.Console;
+using static System.IO.Path;
 
 namespace SteamData.Utils {
   public class ExcelContent {
@@ -167,6 +168,11 @@ namespace SteamData.Utils {
           WriteLine ("Category not found.");
           break;
       }
+
+      File.Move (fileName,
+        Combine (GetDirectoryName (fileName),
+          GetFileNameWithoutExtension (fileName) +
+          "_processed.xlsx"));
     }
   }
 }
