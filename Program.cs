@@ -24,9 +24,9 @@ namespace importSteamToSql {
 
     private void OnExecute (CommandLineApplication app, CancellationToken cancellationToken = default) {
       WriteLine ($"watch mode: {watchMode}");
-      try {
+      if (Directory.Exists (fileOrDirtPath)) {
         ImportSteamFromDirectory (fileOrDirtPath);
-      } catch (Exception) {
+      } else {
         ImportXlsxFile (fileOrDirtPath);
       }
     }
@@ -41,6 +41,11 @@ namespace importSteamToSql {
     }
 
     static void ImportXlsxFile (string fileName) {
+      if (!File.Exists (fileName)) {
+        WriteLine ($"{fileName} does not exist.");
+        return;
+      }
+
       WriteLine ($"Handling {fileName}");
       var fileNameChecker = new Regex (@"(DownloadedStatistics|GameRanks|HWSSurvey|Hardware_Software)_(\d{8}).xlsx$");
       Match match = fileNameChecker.Match (fileName);
