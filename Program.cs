@@ -41,34 +41,29 @@ namespace importSteamToSql {
     }
 
     static void ImportXlsxFile (string fileName) {
+      WriteLine ($"Handling {fileName}");
+
       if (!File.Exists (fileName)) {
         WriteLine ($"{fileName} does not exist.");
         return;
       }
 
-      WriteLine ($"Handling {fileName}");
-      var fileNameChecker = new Regex (@"(DownloadedStatistics|GameRanks|HWSSurvey|Hardware_Software)_(\d{8}).xlsx$");
-      Match match = fileNameChecker.Match (fileName);
-
-      if (match == Match.Empty) {
-        WriteLine ("File is not supported.");
+      if (!new Regex (@"(DownloadedStatistics|GameRanks|HWSSurvey|Hardware_Software)_(\d{8}).xlsx$")
+        .IsMatch (fileName)) {
+        WriteLine ($"{fileName} is not supported.");
         return;
-      } else {
-        if (!File.Exists (fileName)) {
-          WriteLine ("File does not exist.");
-          return;
-        } else {
-          string category = match.Groups[1].Captures[0].ToString ();
-
-          Encoding.RegisterProvider (CodePagesEncodingProvider.Instance);
-          ExcelContent.GetExcelContent (fileName);
-
-          ImportSteamData (category);
-        }
       }
+      Encoding.RegisterProvider (CodePagesEncodingProvider.Instance);
+      ExcelContent.GetExcelContent (fileName);
+      ImportSteamData (fileName);
     }
 
-    static void ImportSteamData (string category) {
+    static void ImportSteamData (string fileName) {
+      string category =
+        new Regex (@"(DownloadedStatistics|GameRanks|HWSSurvey|Hardware_Software)_\d{8}.xlsx$")
+        .Match (fileName).Groups[1].Captures[0]
+        .ToString ();
+
       using (var steamDb = new SteamDataContext ()) {
         switch (category) {
           case "DownloadedStatistics":
