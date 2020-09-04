@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.IO;
+using System.Text.RegularExpressions;
 using ExcelDataReader;
 using static SteamData.DownloadedStatistics.DownloadedStatisticsUtils;
 using static SteamData.GameRanks.GameRanksUtils;
@@ -12,8 +13,12 @@ namespace SteamData.Utils {
   public class ExcelContent {
     protected static DataSet content { get; set; }
     public static DateTime reportDate { get; set; }
-    public static void GetExcelContent (string filename, DateTime date) {
-      reportDate = date;
+    public static void GetExcelContent (string filename) {
+      reportDate = DateTime.ParseExact (
+        new Regex (@"\w+_(\d{8}).xlsx$")
+        .Match (filename).Groups[1].Captures[0]
+        .ToString (),
+        "yyyyMMdd", null);
 
       using (var stream = File.Open (filename, FileMode.Open, FileAccess.Read)) {
         using (var reader = ExcelReaderFactory.CreateReader (stream)) {

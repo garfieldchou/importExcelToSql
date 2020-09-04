@@ -59,10 +59,9 @@ namespace importSteamToSql {
           return;
         } else {
           string category = match.Groups[1].Captures[0].ToString ();
-          DateTime reportDate = DateTime.ParseExact (match.Groups[2].Captures[0].ToString (), "yyyyMMdd", null);
 
           Encoding.RegisterProvider (CodePagesEncodingProvider.Instance);
-          ExcelContent.GetExcelContent (fileName, reportDate);
+          ExcelContent.GetExcelContent (fileName);
 
           ImportSteamData (category);
         }
