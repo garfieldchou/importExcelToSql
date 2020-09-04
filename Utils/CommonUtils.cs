@@ -5,15 +5,15 @@ using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 using ExcelDataReader;
-using static SteamData.DownloadedStatistics.DownloadedStatisticsUtils;
-using static SteamData.GameRanks.GameRanksUtils;
-using static SteamData.HardwareSoftwareSurvey.HardwareSoftwareSurveyUtils;
+using SteamData.DownloadedStatistics;
+using SteamData.GameRanks;
+using SteamData.HardwareSoftwareSurvey;
 
 namespace SteamData.Utils {
   public class ExcelContent {
-    protected static DataSet content { get; set; }
-    public static DateTime reportDate { get; set; }
-    public static void GetExcelContent (string filename) {
+    protected DataSet content { get; set; }
+    public DateTime reportDate { get; set; }
+    public void GetExcelContent (string filename) {
       reportDate = DateTime.ParseExact (
         new Regex (@"\w+_(\d{8}).xlsx$")
         .Match (filename).Groups[1].Captures[0]
@@ -125,23 +125,29 @@ namespace SteamData.Utils {
   }
 
   public static class DbContextExtensions {
-    public static void ImportDownloadedStatistics (this SteamDataContext db) {
-      ImportCountryList (db);
-      ImportRegionDLStatDetail (db);
-      ImportCountryDLStatOverview (db);
-      ImportCountryNetworkDLStat (db);
+    public static void ImportDownloadedStatistics (this SteamDataContext db, string fileName) {
+      using (var downloadedStatistics = new DownloadedStatisticsUtils (fileName)) {
+        downloadedStatistics.ImportCountryList (db);
+        downloadedStatistics.ImportRegionDLStatDetail (db);
+        downloadedStatistics.ImportCountryDLStatOverview (db);
+        downloadedStatistics.ImportCountryNetworkDLStat (db);
+      }
     }
-    public static void ImportGameRank (this SteamDataContext db) {
-      ImportOnlineStat (db);
-      ImportDetailsGame (db);
-      ImportGameRanks (db);
+    public static void ImportGameRank (this SteamDataContext db, string fileName) {
+      using (var gameRank = new GameRanksUtils (fileName)) {
+        gameRank.ImportOnlineStat (db);
+        gameRank.ImportDetailsGame (db);
+        gameRank.ImportGameRanks (db);
+      }
     }
-    public static void ImportHardwareSoftwareSurvey (this SteamDataContext db) {
-      ImportHWSurvey (db);
-      ImportPCVideoCardUsageDetail (db);
-      ImportDirectXOS (db);
-      ImportProceUsageDetail (db);
-      ImportPcPhyCpuDetail (db);
+    public static void ImportHardwareSoftwareSurvey (this SteamDataContext db, string fileName) {
+      using (var hardwareSoftwareSurvey = new HardwareSoftwareSurveyUtils (fileName)) {
+        hardwareSoftwareSurvey.ImportHWSurvey (db);
+        hardwareSoftwareSurvey.ImportPCVideoCardUsageDetail (db);
+        hardwareSoftwareSurvey.ImportDirectXOS (db);
+        hardwareSoftwareSurvey.ImportProceUsageDetail (db);
+        hardwareSoftwareSurvey.ImportPcPhyCpuDetail (db);
+      }
     }
   }
 }

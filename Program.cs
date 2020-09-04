@@ -54,7 +54,6 @@ namespace importSteamToSql {
         return;
       }
       Encoding.RegisterProvider (CodePagesEncodingProvider.Instance);
-      ExcelContent.GetExcelContent (fileName);
       ImportSteamData (fileName);
     }
 
@@ -67,14 +66,14 @@ namespace importSteamToSql {
       using (var steamDb = new SteamDataContext ()) {
         switch (category) {
           case "DownloadedStatistics":
-            steamDb.ImportDownloadedStatistics ();
+            steamDb.ImportDownloadedStatistics (fileName);
             break;
           case "GameRanks":
-            steamDb.ImportGameRank ();
+            steamDb.ImportGameRank (fileName);
             break;
           case "HWSSurvey":
           case "Hardware_Software":
-            steamDb.ImportHardwareSoftwareSurvey ();
+            steamDb.ImportHardwareSoftwareSurvey (fileName);
             break;
           default:
             WriteLine ("Category not found.");

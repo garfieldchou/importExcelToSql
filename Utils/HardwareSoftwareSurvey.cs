@@ -9,8 +9,12 @@ using SteamData.Utils;
 using static System.Console;
 
 namespace SteamData.HardwareSoftwareSurvey {
-  public class HardwareSoftwareSurveyUtils : ExcelContent {
-    public static void ImportHWSurvey (SteamDataContext db) {
+  public class HardwareSoftwareSurveyUtils : ExcelContent, IDisposable {
+    public HardwareSoftwareSurveyUtils (string filename) {
+      GetExcelContent (filename);
+    }
+
+    public void ImportHWSurvey (SteamDataContext db) {
       var hwsSurvey = content.Tables[0];
       string category = string.Empty;
 
@@ -40,31 +44,31 @@ namespace SteamData.HardwareSoftwareSurvey {
       WriteLine (string.Format ("{0,-24}| import {1,6:N0} items", "HWSurvey", affected));
     }
 
-    public static void ImportPCVideoCardUsageDetail (SteamDataContext db) {
+    public void ImportPCVideoCardUsageDetail (SteamDataContext db) {
       ImportUsageDetail (db.PCVideoCardUsageDetails, content.Tables[1]);
       int affected = db.SaveChanges ();
       WriteLine (string.Format ("{0,-24}| import {1,6:N0} items", "PCVideoCardUsageDetail", affected));
     }
 
-    public static void ImportDirectXOS (SteamDataContext db) {
+    public void ImportDirectXOS (SteamDataContext db) {
       ImportUsageDetail (db.DirectXOSs, content.Tables[2]);
       int affected = db.SaveChanges ();
       WriteLine (string.Format ("{0,-24}| import {1,6:N0} items", "DirectXOS", affected));
     }
 
-    public static void ImportProceUsageDetail (SteamDataContext db) {
+    public void ImportProceUsageDetail (SteamDataContext db) {
       ImportUsageDetail (db.ProceUsageDetails, content.Tables[3]);
       int affected = db.SaveChanges ();
       WriteLine (string.Format ("{0,-24}| import {1,6:N0} items", "ProceUsageDetail", affected));
     }
 
-    public static void ImportPcPhyCpuDetail (SteamDataContext db) {
+    public void ImportPcPhyCpuDetail (SteamDataContext db) {
       ImportUsageDetail (db.PcPhyCpuDetails, content.Tables[4]);
       int affected = db.SaveChanges ();
       WriteLine (string.Format ("{0,-24}| import {1,6:N0} items", "PcPhyCpuDetail", affected));
     }
 
-    private static void ImportUsageDetail<T> (DbSet<T> set, DataTable usageDetails)
+    private void ImportUsageDetail<T> (DbSet<T> set, DataTable usageDetails)
     where T : class, ISurveyDetail, new () {
 
       int monthStart = usageDetails.Rows[0][2].ToString ().MonthStringToInt ();
@@ -130,5 +134,6 @@ namespace SteamData.HardwareSoftwareSurvey {
         WriteLine ($"==============");
       }
     }
+    public void Dispose () { }
   }
 }

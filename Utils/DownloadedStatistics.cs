@@ -6,9 +6,12 @@ using static System.Console;
 using SteamData.Utils;
 
 namespace SteamData.DownloadedStatistics {
-  public class DownloadedStatisticsUtils : ExcelContent {
-    private static Dictionary<string, int> CountryIdMapping { get; set; } = new Dictionary<string, int> ();
-    public static void ImportCountryList (SteamDataContext db) {
+  public class DownloadedStatisticsUtils : ExcelContent, IDisposable {
+    public DownloadedStatisticsUtils (string filename) {
+      GetExcelContent (filename);
+    }
+    private Dictionary<string, int> CountryIdMapping { get; set; } = new Dictionary<string, int> ();
+    public void ImportCountryList (SteamDataContext db) {
       int affected = 0;
 
       foreach (DataTable item in content.Tables) {
@@ -31,7 +34,7 @@ namespace SteamData.DownloadedStatistics {
         CountryIdMapping.TryAdd (country.Country, country.CountryListId);
       }
     }
-    public static void ImportRegionDLStatDetail (SteamDataContext db) {
+    public void ImportRegionDLStatDetail (SteamDataContext db) {
       var bwDetails = content.Tables[0];
       int columnCount = bwDetails.Columns.Count;
 
@@ -101,7 +104,7 @@ namespace SteamData.DownloadedStatistics {
       affected = db.SaveChanges ();
       WriteLine (string.Format ("{0,-24}| import {1,6:N0} items", "RegionDLStatOverview", affected));
     }
-    public static void ImportCountryDLStatOverview (SteamDataContext db) {
+    public void ImportCountryDLStatOverview (SteamDataContext db) {
       foreach (DataTable table in content.Tables) {
         if ("BandWidth Data" == table.ToString ()) continue;
 
@@ -127,7 +130,7 @@ namespace SteamData.DownloadedStatistics {
       int affected = db.SaveChanges ();
       WriteLine (string.Format ("{0,-24}| import {1,6:N0} items", "CountryDLStatOverview", affected));
     }
-    public static void ImportCountryNetworkDLStat (SteamDataContext db) {
+    public void ImportCountryNetworkDLStat (SteamDataContext db) {
       foreach (DataTable table in content.Tables) {
         if ("BandWidth Data" == table.ToString ()) continue;
 
@@ -150,6 +153,7 @@ namespace SteamData.DownloadedStatistics {
       int affected = db.SaveChanges ();
       WriteLine (string.Format ("{0,-24}| import {1,6:N0} items", "CountryNetworkDLStat", affected));
     }
-  }
 
+    public void Dispose () { }
+  }
 }
