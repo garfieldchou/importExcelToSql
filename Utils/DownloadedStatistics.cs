@@ -119,8 +119,8 @@ namespace SteamData.DownloadedStatistics {
           WorkWeek = reportDate.GetIso8601WeekOfYear (),
           Day = reportDate.Day,
           Time = reportDate,
-          TotalTb = table.Rows[4][1].ToString ().ConvertTotalBytesTB (),
-          AvgDlSpeedMbps = table.Rows[4][2].ToString ().ConvertDlSpeedToMB (),
+          TotalTb = ConvertTotalBytesTB (table.Rows[4][1].ToString ()),
+          AvgDlSpeedMbps = ConvertDlSpeedToMB (table.Rows[4][2].ToString ()),
           SteamPercent = Decimal.Parse (((string) (table.Rows[4][3])).Split ('%') [0]),
           CountryListId = countryId
         };
@@ -159,6 +159,36 @@ namespace SteamData.DownloadedStatistics {
       ImportRegionDLStatDetail (db);
       ImportCountryDLStatOverview (db);
       ImportCountryNetworkDLStat (db);
+    }
+
+    private decimal ConvertTotalBytesTB (string totalBytes) {
+      string[] numberAndUnit = totalBytes.Split (' ');
+      decimal bytesNumber = Decimal.Parse (numberAndUnit[0]);
+      string unit = numberAndUnit[1];
+
+      return unit
+      switch {
+        "PB" => bytesNumber * (decimal) Math.Pow (10, 3),
+          "TB" => bytesNumber,
+          "GB" => bytesNumber * (decimal) Math.Pow (10, -3),
+          "MB" => bytesNumber * (decimal) Math.Pow (10, -6),
+          "kB" => bytesNumber * (decimal) Math.Pow (10, -9),
+          _ => -1M
+      };
+    }
+
+    private decimal ConvertDlSpeedToMB (string speed) {
+      string[] numberAndUnit = speed.Split (' ');
+      decimal bytesNumber = Decimal.Parse (numberAndUnit[0]);
+      string unit = numberAndUnit[1];
+
+      return unit
+      switch {
+        "Gbps" => bytesNumber * (decimal) Math.Pow (10, 3),
+          "Mbps" => bytesNumber,
+          "kbps" => bytesNumber * (decimal) Math.Pow (10, -3),
+          _ => -1M
+      };
     }
 
     public void Dispose () { }

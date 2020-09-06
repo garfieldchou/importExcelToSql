@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Linq;
@@ -70,7 +71,7 @@ namespace SteamData.HardwareSoftwareSurvey {
     private void ImportUsageDetail<T> (DbSet<T> set, DataTable usageDetails)
     where T : class, ISurveyDetail, new () {
 
-      int monthStart = usageDetails.Rows[0][2].ToString ().MonthStringToInt ();
+      int monthStart = MonthStringToInt (usageDetails.Rows[0][2].ToString ());
       int startYear = reportDate.Year;
       string category = usageDetails.Rows[0][1].ToString ();
       int latestYearInDb = int.MinValue;
@@ -141,6 +142,20 @@ namespace SteamData.HardwareSoftwareSurvey {
       ImportProceUsageDetail (db);
       ImportPcPhyCpuDetail (db);
     }
+
+    private int MonthStringToInt (string month) => new Dictionary<string, int> { { "JAN", 1 },
+      { "FEB", 2 },
+      { "MAR", 3 },
+      { "APR", 4 },
+      { "MAY", 5 },
+      { "JUN", 6 },
+      { "JUL", 7 },
+      { "AUG", 8 },
+      { "SEP", 9 },
+      { "OCT", 10 },
+      { "NOV", 11 },
+      { "DEC", 12 }
+    }[month];
 
     public void Dispose () { }
   }

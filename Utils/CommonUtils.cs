@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.IO;
@@ -82,50 +81,6 @@ namespace SteamData.Utils {
       // Return the week of our adjusted day
       return CultureInfo.InvariantCulture.Calendar.GetWeekOfYear (time, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
     }
-
-    public static decimal ConvertTotalBytesTB (this string totalBytes) {
-      string[] numberAndUnit = totalBytes.Split (' ');
-      decimal bytesNumber = Decimal.Parse (numberAndUnit[0]);
-      string unit = numberAndUnit[1];
-
-      return unit
-      switch {
-        "PB" => bytesNumber * (decimal) Math.Pow (10, 3),
-          "TB" => bytesNumber,
-          "GB" => bytesNumber * (decimal) Math.Pow (10, -3),
-          "MB" => bytesNumber * (decimal) Math.Pow (10, -6),
-          "kB" => bytesNumber * (decimal) Math.Pow (10, -9),
-          _ => -1M
-      };
-    }
-
-    public static decimal ConvertDlSpeedToMB (this string speed) {
-      string[] numberAndUnit = speed.Split (' ');
-      decimal bytesNumber = Decimal.Parse (numberAndUnit[0]);
-      string unit = numberAndUnit[1];
-
-      return unit
-      switch {
-        "Gbps" => bytesNumber * (decimal) Math.Pow (10, 3),
-          "Mbps" => bytesNumber,
-          "kbps" => bytesNumber * (decimal) Math.Pow (10, -3),
-          _ => -1M
-      };
-    }
-
-    public static int MonthStringToInt (this string month) => new Dictionary<string, int> { { "JAN", 1 },
-      { "FEB", 2 },
-      { "MAR", 3 },
-      { "APR", 4 },
-      { "MAY", 5 },
-      { "JUN", 6 },
-      { "JUL", 7 },
-      { "AUG", 8 },
-      { "SEP", 9 },
-      { "OCT", 10 },
-      { "NOV", 11 },
-      { "DEC", 12 }
-    }[month];
   }
 
   public static class DbContextExtensions {
