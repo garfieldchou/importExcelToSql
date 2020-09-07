@@ -26,8 +26,27 @@ namespace SteamData {
     public DbSet<PcPhyCpuDetail> PcPhyCpuDetails { get; set; }
 
     protected override void OnConfiguring (DbContextOptionsBuilder optionsBuilder) {
-      optionsBuilder.UseSqlServer (
-        @"Server=APZA001GOD;Database=Steam;Integrated Security=True;MultipleActiveResultSets=true");
+      DotNetEnv.Env.Load ();
+
+      string connectionString =
+        DotNetEnv.Env.GetBool ("DB_INTEGRATED_SECURITY") &&
+        DotNetEnv.Env.GetString ("DOTNET_ENV") == "prod" ?
+        string.Format ("Server={0};Database={1};Integrated Security={2};MultipleActiveResultSets={3}",
+          DotNetEnv.Env.GetString ("DB_SERVER"),
+          DotNetEnv.Env.GetString ("DB_NAME"),
+          DotNetEnv.Env.GetBool ("DB_INTEGRATED_SECURITY"),
+          DotNetEnv.Env.GetBool ("DB_MULTI_ACTIVE_RES_SET")
+        ) :
+        string.Format ("Server={0};Database={1};Integrated Security={2};User ID={3};Password={4};MultipleActiveResultSets={5}",
+          DotNetEnv.Env.GetString ("DB_SERVER"),
+          DotNetEnv.Env.GetString ("DB_NAME"),
+          DotNetEnv.Env.GetBool ("DB_INTEGRATED_SECURITY"),
+          DotNetEnv.Env.GetString ("DB_SERVER_USER"),
+          DotNetEnv.Env.GetString ("DB_SERVER_PASSWORD"),
+          DotNetEnv.Env.GetBool ("DB_MULTI_ACTIVE_RES_SET")
+        );
+
+      optionsBuilder.UseSqlServer (connectionString);
     }
     protected override void OnModelCreating (
       ModelBuilder modelBuilder) {
