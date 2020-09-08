@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using static System.Console;
@@ -12,6 +13,8 @@ using SteamData.Utils;
 namespace importSteamToSql {
   [Command (Name = "importSteamToSql", Description = "Import Steam data from xlsx to MS SQL server")]
   [HelpOption ("-?")]
+  [VersionOptionFromMember ("-v|--version", MemberName = nameof (GetVersion))]
+
   class Program {
     static void Main (string[] args) => CommandLineApplication.Execute<Program> (args);
 
@@ -58,5 +61,7 @@ namespace importSteamToSql {
         steamDb.ImportSteamDataFrom (fileName);
       }
     }
+
+    private static string GetVersion () => typeof (Program).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute> ().InformationalVersion;
   }
 }
