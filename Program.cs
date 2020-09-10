@@ -34,7 +34,9 @@ namespace importSteamToSql {
     }
 
     static void ImportSteamFromDirectory (string dirt) {
-      var files = Directory.EnumerateFiles (dirt, "*.xlsx", SearchOption.AllDirectories).OrderBy (file => file);
+      var files = Directory.EnumerateFiles (dirt, "*.xlsx", SearchOption.AllDirectories)
+        .Where (file => !file.Contains ("Processed"))
+        .OrderBy (file => file);
       WriteLine ($"{files.Count()} files to be handled...");
 
       foreach (var item in files) {

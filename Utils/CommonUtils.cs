@@ -124,10 +124,16 @@ namespace SteamData.Utils {
           break;
       }
 
-      File.Move (fileName,
-        Combine (GetDirectoryName (fileName),
-          GetFileNameWithoutExtension (fileName) +
-          "_processed.xlsx"));
+      string targetDirectory = Combine (
+        GetDirectoryName (fileName),
+        "..", "Processed");
+
+      string targetFileName = Combine (
+        targetDirectory,
+        GetFileName (fileName));
+
+      if (!Directory.Exists (targetDirectory)) Directory.CreateDirectory (targetDirectory);
+      File.Move (fileName, targetFileName);
     }
   }
 }
