@@ -17,6 +17,7 @@ namespace SteamData {
     public DbSet<OnlineStat> OnlineStats { get; set; }
     public DbSet<GameRank> GameRanks { get; set; }
     public DbSet<DetailsGame> DetailsGames { get; set; }
+    public DbSet<DetailsGamesReviewerHistory> DetailsGamesReviewerHistory { get; set; }
 
     // Hardware_Software_Survey
     public DbSet<HWSurvey> HWSurveys { get; set; }
