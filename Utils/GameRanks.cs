@@ -84,19 +84,35 @@ namespace SteamData.GameRanks {
       for (int i = 1; i < gameDetails.Rows.Count; i++) {
         DataRow detail = gameDetails.Rows[i];
         DateTime releaseDate = DateTime.Parse (detail[4].ToString ());
-
         string game = detail[0].ToString ();
-        if (!db.DetailsGames.Any (d => d.Game == game)) {
+        string description = detail[1].ToString ();
+        string recentReviews = detail[2].ToString ();
+        string allReviews = detail[3].ToString ();
+        string gameLink = gameDetails.Columns.Count == 8 ? detail[7].ToString () : string.Empty;
+        string hotTags = detail[5].ToString ();
+        string systemRequirements = detail[6].ToString ();
+
+        DetailsGame detailGame = db.DetailsGames.FirstOrDefault (d => d.Game == game);
+
+        if (detailGame == default (DetailsGame)) {
           db.DetailsGames.Add (new DetailsGame {
             Game = game,
-              GameDescription = detail[1].ToString (),
-              RecentReviews = detail[2].ToString (),
-              AllReviews = detail[3].ToString (),
+              GameDescription = description,
+              RecentReviews = recentReviews,
+              AllReviews = allReviews,
               ReleaseDate = releaseDate,
-              HotTags = detail[5].ToString (),
-              SystemRequirements = detail[6].ToString (),
-              Links = gameDetails.Columns.Count == 8 ? detail[7].ToString () : string.Empty
+              HotTags = hotTags,
+              SystemRequirements = systemRequirements,
+              Links = gameLink
           });
+        } else {
+          detailGame.GameDescription = description;
+          detailGame.RecentReviews = recentReviews;
+          detailGame.AllReviews = allReviews;
+          detailGame.ReleaseDate = releaseDate;
+          detailGame.HotTags = hotTags;
+          detailGame.SystemRequirements = systemRequirements;
+          detailGame.Links = gameLink;
         }
       }
       int affected = db.SaveChanges ();
