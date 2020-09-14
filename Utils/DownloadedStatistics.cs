@@ -27,7 +27,7 @@ namespace SteamData.DownloadedStatistics {
       }
       affected += db.SaveChanges ();
 
-      WriteLine (string.Format ("{0,-24}| import {1,6:N0} items", "CountryList", affected));
+      WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "CountryList", affected));
 
       // Populate the latest Country-ID mapping for the future uses
       foreach (var country in db.CountryLists) {
@@ -70,7 +70,7 @@ namespace SteamData.DownloadedStatistics {
         }
       }
       int affected = db.SaveChanges ();
-      WriteLine (string.Format ("{0,-24}| import {1,6:N0} items", "RegionDLStatDetail", affected));
+      WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "RegionDLStatDetail", affected));
 
       // aggregate before save changes
       var query = db.RegionDLStatDetails
@@ -102,7 +102,7 @@ namespace SteamData.DownloadedStatistics {
         }
       }
       affected = db.SaveChanges ();
-      WriteLine (string.Format ("{0,-24}| import {1,6:N0} items", "RegionDLStatOverview", affected));
+      WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "RegionDLStatOverview", affected));
     }
     private void ImportCountryDLStatOverview (SteamDataContext db) {
       foreach (DataTable table in content.Tables) {
@@ -128,7 +128,7 @@ namespace SteamData.DownloadedStatistics {
         db.CountryDLStatOverviews.Add (dlStat);
       }
       int affected = db.SaveChanges ();
-      WriteLine (string.Format ("{0,-24}| import {1,6:N0} items", "CountryDLStatOverview", affected));
+      WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "CountryDLStatOverview", affected));
     }
     private void ImportCountryNetworkDLStat (SteamDataContext db) {
       foreach (DataTable table in content.Tables) {
@@ -151,7 +151,7 @@ namespace SteamData.DownloadedStatistics {
         }
       }
       int affected = db.SaveChanges ();
-      WriteLine (string.Format ("{0,-24}| import {1,6:N0} items", "CountryNetworkDLStat", affected));
+      WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "CountryNetworkDLStat", affected));
     }
 
     public override void ImportTo (SteamDataContext db) {
