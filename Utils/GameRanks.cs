@@ -103,9 +103,38 @@ namespace SteamData.GameRanks {
       WriteLine (string.Format ("{0,-24}| import {1,6:N0} items", "DetailsGame", affected));
     }
 
+    private void ImportDetailsGamesReviewerHistory (SteamDataContext db) {
+      var gameDetailsDict = new Dictionary<string, int> ();
+      foreach (var detail in db.DetailsGames) {
+        gameDetailsDict.Add (detail.Game, detail.DetailsGameId);
+      }
+
+      var gameDetails = content.Tables[2];
+      for (int i = 1; i < gameDetails.Rows.Count; i++) {
+        DataRow detail = gameDetails.Rows[i];
+        DateTime releaseDate = DateTime.Parse (detail[4].ToString ());
+        string game = detail[0].ToString ();
+
+        if (!gameDetailsDict.TryGetValue (game, out int gameId)) gameId = 1;
+
+        db.DetailsGamesReviewerHistory.Add (new DetailsGamesReviewerHistory {
+          DetailsGameId = gameId,
+            RecordYear = reportDate.Year,
+            RecordMonth = reportDate.Month,
+            RecordWorkWeek = reportDate.GetIso8601WeekOfYear (),
+            DateTime = reportDate,
+            RecentReviews = detail[2].ToString (),
+            AllReviews = detail[3].ToString ()
+        });
+      }
+      int affected = db.SaveChanges ();
+      WriteLine (string.Format ("{0,-24}| import {1,6:N0} items", "DetailsGamesReviewerHistory", affected));
+    }
+
     public override void ImportTo (SteamDataContext db) {
       ImportOnlineStat (db);
       ImportDetailsGame (db);
+      ImportDetailsGamesReviewerHistory (db);
       ImportGameRanks (db);
     }
 
