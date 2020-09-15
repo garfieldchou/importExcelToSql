@@ -17,11 +17,16 @@ namespace importSteamToSql {
 
   class Program {
     static void Main (string[] args) {
-      Trace.Listeners.Add (new TextWriterTraceListener (
-        File.CreateText ("log.txt")));
-      Trace.AutoFlush = true;
+      try {
+        Trace.Listeners.Add (new TextWriterTraceListener (
+          File.CreateText ("log.txt")));
+        Trace.AutoFlush = true;
 
-      CommandLineApplication.Execute<Program> (args);
+        CommandLineApplication.Execute<Program> (args);
+      } catch (System.Exception ex) {
+        Trace.WriteLine ($"{ex.GetType()}: {ex.Message}");
+        Debug.WriteLine ($"{ex.StackTrace}");
+      }
     }
 
     [Argument (0, Description = "Specify xlsx file to be imported or the directory containing those files\n default: current directory")]
