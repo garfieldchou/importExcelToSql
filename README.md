@@ -56,6 +56,12 @@ Build & Run
 $ dotnet run
 ```
 
+Run the console app with Release configuration
+
+```
+$ dotnet run -c Release
+```
+
 Import multiple xlsx files in current directory to db
 
 ```
