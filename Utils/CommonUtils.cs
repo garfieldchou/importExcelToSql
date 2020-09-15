@@ -1,5 +1,6 @@
 using System;
 using System.Data;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -7,7 +8,6 @@ using ExcelDataReader;
 using SteamData.DownloadedStatistics;
 using SteamData.GameRanks;
 using SteamData.HardwareSoftwareSurvey;
-using static System.Console;
 using static System.IO.Path;
 
 namespace SteamData.Utils {
@@ -120,7 +120,7 @@ namespace SteamData.Utils {
           db.ImportHardwareSoftwareSurvey (fileName);
           break;
         default:
-          WriteLine ("Category not found.");
+          Trace.WriteLine ("Category not found.");
           break;
       }
 

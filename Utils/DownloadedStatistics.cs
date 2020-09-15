@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
-using static System.Console;
 using SteamData.Utils;
 
 namespace SteamData.DownloadedStatistics {
@@ -27,7 +27,7 @@ namespace SteamData.DownloadedStatistics {
       }
       affected += db.SaveChanges ();
 
-      WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "CountryList", affected));
+      Trace.WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "CountryList", affected));
 
       // Populate the latest Country-ID mapping for the future uses
       foreach (var country in db.CountryLists) {
@@ -70,7 +70,7 @@ namespace SteamData.DownloadedStatistics {
         }
       }
       int affected = db.SaveChanges ();
-      WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "RegionDLStatDetail", affected));
+      Trace.WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "RegionDLStatDetail", affected));
 
       // aggregate before save changes
       var query = db.RegionDLStatDetails
@@ -102,7 +102,7 @@ namespace SteamData.DownloadedStatistics {
         }
       }
       affected = db.SaveChanges ();
-      WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "RegionDLStatOverview", affected));
+      Trace.WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "RegionDLStatOverview", affected));
     }
     private void ImportCountryDLStatOverview (SteamDataContext db) {
       foreach (DataTable table in content.Tables) {
@@ -110,7 +110,7 @@ namespace SteamData.DownloadedStatistics {
 
         string country = (string) table.Rows[1][1];
         if (!CountryIdMapping.TryGetValue (country, out int countryId)) {
-          WriteLine ($"{country} is not found in CountryList");
+          Trace.WriteLine ($"{country} is not found in CountryList");
         }
 
         var dlStat = new CountryDLStatOverview {
@@ -128,7 +128,7 @@ namespace SteamData.DownloadedStatistics {
         db.CountryDLStatOverviews.Add (dlStat);
       }
       int affected = db.SaveChanges ();
-      WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "CountryDLStatOverview", affected));
+      Trace.WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "CountryDLStatOverview", affected));
     }
     private void ImportCountryNetworkDLStat (SteamDataContext db) {
       foreach (DataTable table in content.Tables) {
@@ -136,7 +136,7 @@ namespace SteamData.DownloadedStatistics {
 
         string country = (string) table.Rows[1][1];
         if (!CountryIdMapping.TryGetValue (country, out int countryId)) {
-          WriteLine ($"{country} is not found in CountryList");
+          Trace.WriteLine ($"{country} is not found in CountryList");
         }
 
         for (int i = 9; i < table.Rows.Count; i++) {
@@ -151,7 +151,7 @@ namespace SteamData.DownloadedStatistics {
         }
       }
       int affected = db.SaveChanges ();
-      WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "CountryNetworkDLStat", affected));
+      Trace.WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "CountryNetworkDLStat", affected));
     }
 
     public override void ImportTo (SteamDataContext db) {

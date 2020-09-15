@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using SteamData.Utils;
 using static System.Globalization.NumberStyles;
-using static System.Console;
 
 namespace SteamData.GameRanks {
   public class GameRanksUtils : ExcelContent, IDisposable {
@@ -38,7 +38,7 @@ namespace SteamData.GameRanks {
         }
       }
       int affected = db.SaveChanges ();
-      WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "OnlineStat", affected));
+      Trace.WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "OnlineStat", affected));
     }
 
     private void ImportGameRanks (SteamDataContext db) {
@@ -76,7 +76,7 @@ namespace SteamData.GameRanks {
         });
       }
       int affected = db.SaveChanges ();
-      WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "GameRank", affected));
+      Trace.WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "GameRank", affected));
     }
 
     private void ImportDetailsGame (SteamDataContext db) {
@@ -116,7 +116,7 @@ namespace SteamData.GameRanks {
         }
       }
       int affected = db.SaveChanges ();
-      WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "DetailsGame", affected));
+      Trace.WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "DetailsGame", affected));
     }
 
     private void ImportDetailsGamesReviewerHistory (SteamDataContext db) {
@@ -144,7 +144,7 @@ namespace SteamData.GameRanks {
         });
       }
       int affected = db.SaveChanges ();
-      WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "DetailsGamesReviewerHistory", affected));
+      Trace.WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "DetailsGamesReviewerHistory", affected));
     }
 
     public override void ImportTo (SteamDataContext db) {

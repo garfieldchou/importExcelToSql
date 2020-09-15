@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 using SteamData.Utils;
-using static System.Console;
 
 namespace SteamData.HardwareSoftwareSurvey {
   public class HardwareSoftwareSurveyUtils : ExcelContent, IDisposable {
@@ -41,31 +41,31 @@ namespace SteamData.HardwareSoftwareSurvey {
         });
       }
       int affected = db.SaveChanges ();
-      WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "HWSurvey", affected));
+      Trace.WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "HWSurvey", affected));
     }
 
     private void ImportPCVideoCardUsageDetail (SteamDataContext db) {
       ImportUsageDetail (db.PCVideoCardUsageDetails, content.Tables[1]);
       int affected = db.SaveChanges ();
-      WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "PCVideoCardUsageDetail", affected));
+      Trace.WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "PCVideoCardUsageDetail", affected));
     }
 
     private void ImportDirectXOS (SteamDataContext db) {
       ImportUsageDetail (db.DirectXOSs, content.Tables[2]);
       int affected = db.SaveChanges ();
-      WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "DirectXOS", affected));
+      Trace.WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "DirectXOS", affected));
     }
 
     private void ImportProceUsageDetail (SteamDataContext db) {
       ImportUsageDetail (db.ProceUsageDetails, content.Tables[3]);
       int affected = db.SaveChanges ();
-      WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "ProceUsageDetail", affected));
+      Trace.WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "ProceUsageDetail", affected));
     }
 
     private void ImportPcPhyCpuDetail (SteamDataContext db) {
       ImportUsageDetail (db.PcPhyCpuDetails, content.Tables[4]);
       int affected = db.SaveChanges ();
-      WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "PcPhyCpuDetail", affected));
+      Trace.WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "PcPhyCpuDetail", affected));
     }
 
     private void ImportUsageDetail<T> (DbSet<T> set, DataTable usageDetails)
@@ -87,11 +87,11 @@ namespace SteamData.HardwareSoftwareSurvey {
         latestYearMonthInDb = detailInDb.Month;
       }
 
-      WriteLine ($"{ latestYearInDb }, { latestYearMonthInDb }");
+      Debug.WriteLine ($"{ latestYearInDb }, { latestYearMonthInDb }");
 
-      WriteLine ($"**********");
-      WriteLine ($"{category}");
-      WriteLine ($"**********");
+      Debug.WriteLine ($"**********");
+      Debug.WriteLine ($"{category}");
+      Debug.WriteLine ($"**********");
 
       for (int i = 1; i < usageDetails.Rows.Count; i++) {
         DataRow detail = usageDetails.Rows[i];
@@ -99,9 +99,9 @@ namespace SteamData.HardwareSoftwareSurvey {
         if (detail[0].ToString () == string.Empty) {
           if (detail[1].ToString () != string.Empty) {
             category = detail[1].ToString ();
-            WriteLine ($"**********");
-            WriteLine ($"{category}");
-            WriteLine ($"**********");
+            Debug.WriteLine ($"**********");
+            Debug.WriteLine ($"{category}");
+            Debug.WriteLine ($"**********");
           }
           continue;
         }
@@ -121,7 +121,7 @@ namespace SteamData.HardwareSoftwareSurvey {
           if (year < latestYearInDb ||
             (year == latestYearInDb && month <= latestYearMonthInDb)) continue;
 
-          WriteLine ($"row {i}: {year}-{month}-{item}-{percentage}");
+          Debug.WriteLine ($"row {i}: {year}-{month}-{item}-{percentage}");
 
           set.Add (new T {
             Year = year,
@@ -131,7 +131,7 @@ namespace SteamData.HardwareSoftwareSurvey {
               Percentage = percentage
           });
         }
-        WriteLine ($"==============");
+        Debug.WriteLine ($"==============");
       }
     }
 
