@@ -133,6 +133,8 @@ namespace SteamData.Utils {
         GetFileName (fileName));
 
       if (!Directory.Exists (targetDirectory)) Directory.CreateDirectory (targetDirectory);
+
+      Trace.WriteLine ($"Move\n{fileName}\nto\n{targetFileName}\n");
       File.Move (fileName, targetFileName);
     }
   }
