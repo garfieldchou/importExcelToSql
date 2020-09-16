@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using McMaster.Extensions.CommandLineUtils;
+using Microsoft.Extensions.Configuration;
 using SteamData;
 using SteamData.Utils;
 
@@ -18,9 +19,26 @@ namespace importSteamToSql {
   class Program {
     static void Main (string[] args) {
       try {
+        DotNetEnv.Env.Load ();
+
         Trace.Listeners.Add (new TextWriterTraceListener (
           File.CreateText ("log.txt")));
         Trace.AutoFlush = true;
+
+        var builder = new ConfigurationBuilder ().AddEnvironmentVariables ("SteamSwitch_");
+        IConfigurationRoot configuration = builder.Build ();
+
+        var ts = new TraceSwitch (
+          displayName: "SteamSwitch",
+          description: "This switch is set via environment variable.");
+
+        ts.Level = TraceLevel.Verbose;
+
+        configuration.GetSection ("TraceSwitch").Bind (ts);
+        Trace.WriteLineIf (ts.TraceError, "Trace error");
+        Trace.WriteLineIf (ts.TraceWarning, "Trace warning");
+        Trace.WriteLineIf (ts.TraceInfo, "Trace information");
+        Trace.WriteLineIf (ts.TraceVerbose, "Trace verbose");
 
         CommandLineApplication.Execute<Program> (args);
       } catch (System.Exception ex) {
