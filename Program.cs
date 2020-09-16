@@ -36,6 +36,7 @@ namespace importSteamToSql {
     private bool watchMode { get; } = false;
 
     private void OnExecute (CommandLineApplication app, CancellationToken cancellationToken = default) {
+      Trace.WriteLine ($"Version {GetVersion()}");
       using (var steamDb = new SteamDataContext ()) {
         Trace.WriteLine ($"Send a query for Db connection test...");
         int count = (
@@ -84,6 +85,6 @@ namespace importSteamToSql {
       }
     }
 
-    private static string GetVersion () => typeof (Program).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute> ().InformationalVersion;
+    private string GetVersion () => typeof (Program).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute> ().InformationalVersion;
   }
 }
