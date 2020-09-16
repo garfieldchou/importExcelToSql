@@ -36,6 +36,15 @@ namespace importSteamToSql {
     private bool watchMode { get; } = false;
 
     private void OnExecute (CommandLineApplication app, CancellationToken cancellationToken = default) {
+      using (var steamDb = new SteamDataContext ()) {
+        Trace.WriteLine ($"Send a query for Db connection test...");
+        int count = (
+          from d in steamDb.DetailsGames
+          let dt = d.DetailsGameId
+          orderby dt descending select dt).Count ();
+        Trace.WriteLine ($"DetailsGames current count: {count}\n");
+      }
+
       Debug.WriteLine ($"watch mode: {watchMode}");
       if (Directory.Exists (fileOrDirtPath)) {
         ImportSteamFromDirectory (fileOrDirtPath);
