@@ -6,7 +6,7 @@ using System.Linq;
 using SteamData.Utils;
 
 namespace SteamData.DownloadedStatistics {
-  public class DownloadedStatisticsUtils : ExcelContent, IDisposable {
+  public class DownloadedStatisticsUtils : ExcelContent, IDisposable, ICheckDuplicateHandling {
     public DownloadedStatisticsUtils (string filename) {
       GetExcelContent (filename);
     }
@@ -154,11 +154,17 @@ namespace SteamData.DownloadedStatistics {
       Trace.WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "CountryNetworkDLStat", affected));
     }
 
+    public bool IsHandledBefore (SteamDataContext targetDb) => targetDb.CountryDLStatOverviews.Any (o => o.Time == reportDate);
+
     public override void ImportTo (SteamDataContext db) {
-      ImportCountryList (db);
-      ImportRegionDLStatDetail (db);
-      ImportCountryDLStatOverview (db);
-      ImportCountryNetworkDLStat (db);
+      if (!IsHandledBefore (db)) {
+        ImportCountryList (db);
+        ImportRegionDLStatDetail (db);
+        ImportCountryDLStatOverview (db);
+        ImportCountryNetworkDLStat (db);
+      } else {
+        Trace.WriteLine ($"Skip importing file handled before");
+      }
     }
 
     private decimal ConvertTotalBytesTB (string totalBytes) {

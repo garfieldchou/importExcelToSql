@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using SteamData.Utils;
 
 namespace SteamData.HardwareSoftwareSurvey {
-  public class HardwareSoftwareSurveyUtils : ExcelContent, IDisposable {
+  public class HardwareSoftwareSurveyUtils : ExcelContent, IDisposable, ICheckDuplicateHandling {
     public HardwareSoftwareSurveyUtils (string filename) {
       GetExcelContent (filename);
     }
@@ -135,12 +135,18 @@ namespace SteamData.HardwareSoftwareSurvey {
       }
     }
 
+    public bool IsHandledBefore (SteamDataContext targetDb) => targetDb.HWSurveys.Any (o => o.Time == reportDate);
+
     public override void ImportTo (SteamDataContext db) {
-      ImportHWSurvey (db);
-      ImportPCVideoCardUsageDetail (db);
-      ImportDirectXOS (db);
-      ImportProceUsageDetail (db);
-      ImportPcPhyCpuDetail (db);
+      if (!IsHandledBefore (db)) {
+        ImportHWSurvey (db);
+        ImportPCVideoCardUsageDetail (db);
+        ImportDirectXOS (db);
+        ImportProceUsageDetail (db);
+        ImportPcPhyCpuDetail (db);
+      } else {
+        Trace.WriteLine ($"Skip importing file handled before");
+      }
     }
 
     private int MonthStringToInt (string month) => new Dictionary<string, int> { { "JAN", 1 },

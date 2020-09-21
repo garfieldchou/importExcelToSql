@@ -7,7 +7,7 @@ using SteamData.Utils;
 using static System.Globalization.NumberStyles;
 
 namespace SteamData.GameRanks {
-  public class GameRanksUtils : ExcelContent, IDisposable {
+  public class GameRanksUtils : ExcelContent, IDisposable, ICheckDuplicateHandling {
     public GameRanksUtils (string filename) {
       GetExcelContent (filename);
     }
@@ -147,11 +147,17 @@ namespace SteamData.GameRanks {
       Trace.WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "DetailsGamesReviewerHistory", affected));
     }
 
+    public bool IsHandledBefore (SteamDataContext targetDb) => targetDb.DetailsGamesReviewerHistory.Any (o => o.DateTime == reportDate);
+
     public override void ImportTo (SteamDataContext db) {
-      ImportOnlineStat (db);
-      ImportDetailsGame (db);
-      ImportDetailsGamesReviewerHistory (db);
-      ImportGameRanks (db);
+      if (!IsHandledBefore (db)) {
+        ImportOnlineStat (db);
+        ImportDetailsGame (db);
+        ImportDetailsGamesReviewerHistory (db);
+        ImportGameRanks (db);
+      } else {
+        Trace.WriteLine ($"Skip importing file handled before");
+      }
     }
 
     public void Dispose () { }
