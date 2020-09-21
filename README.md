@@ -79,3 +79,11 @@ Import multiple xlsx files under some directory
 ```
 $ dotnet run --no-build ../spec/Steam_20200826
 ```
+
+Publish release version for Windows 10 / macOS / RHEL
+
+```
+$ dotnet publish -c Release -r win10-x64
+$ dotnet publish -c Release -r osx-x64
+$ dotnet publish -c Release -r rhel.7.4-x64
+```
