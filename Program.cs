@@ -63,6 +63,18 @@ namespace importSteamToSql {
       foreach (var item in files) {
         ImportXlsxFile (item);
       }
+
+      // Print out the xlsx files left in the target directory to check if anything is missed.
+      var filesAfterProcessed = Directory.EnumerateFiles (dirt, "*.xlsx", SearchOption.AllDirectories)
+        .Where (file => !file.Contains ("Processed"))
+        .OrderBy (file => file);
+      Trace.WriteLine ($"{filesAfterProcessed.Count()} xlsx file(s) in target directory");
+
+      if (filesAfterProcessed.Count () > 0) {
+        foreach (var item in filesAfterProcessed) {
+          Trace.WriteLine ($"{item}");
+        }
+      }
     }
 
     static void ImportXlsxFile (string fileName) {
