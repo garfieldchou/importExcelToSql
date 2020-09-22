@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -55,24 +56,20 @@ namespace importSteamToSql {
     }
 
     static void ImportSteamFromDirectory (string dirt) {
-      var files = Directory.EnumerateFiles (dirt, "*.xlsx", SearchOption.AllDirectories)
-        .Where (file => !file.Contains ("Processed"))
-        .OrderBy (file => file);
-      Trace.WriteLine ($"{files.Count()} files to be handled...");
+      var fileInfo = EnumerateXlsxFiles (dirt);
+      Trace.WriteLine ($"{fileInfo.Count} files to be handled...");
 
-      foreach (var item in files) {
-        ImportXlsxFile (item);
+      foreach (var file in fileInfo.Files) {
+        ImportXlsxFile (file);
       }
 
       // Print out the xlsx files left in the target directory to check if anything is missed.
-      var filesAfterProcessed = Directory.EnumerateFiles (dirt, "*.xlsx", SearchOption.AllDirectories)
-        .Where (file => !file.Contains ("Processed"))
-        .OrderBy (file => file);
-      Trace.WriteLine ($"{filesAfterProcessed.Count()} xlsx file(s) in target directory");
+      var processedFilesInfo = EnumerateXlsxFiles (dirt);
+      Trace.WriteLine ($"{processedFilesInfo.Count} xlsx file(s) in target directory");
 
-      if (filesAfterProcessed.Count () > 0) {
-        foreach (var item in filesAfterProcessed) {
-          Trace.WriteLine ($"{item}");
+      if (processedFilesInfo.Count > 0) {
+        foreach (var file in processedFilesInfo.Files) {
+          Trace.WriteLine ($"{file}");
         }
       }
     }
@@ -98,5 +95,12 @@ namespace importSteamToSql {
     }
 
     private string GetVersion () => typeof (Program).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute> ().InformationalVersion;
+
+    static (int Count, IEnumerable<string> Files) EnumerateXlsxFiles (string directory) {
+      var files = Directory.EnumerateFiles (directory, "*.xlsx", SearchOption.AllDirectories)
+        .Where (file => !file.Contains ("Processed"))
+        .OrderBy (file => file);
+      return (Count: files.Count (), Files: files);
+    }
   }
 }
