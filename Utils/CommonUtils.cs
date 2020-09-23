@@ -136,7 +136,8 @@ namespace SteamData.Utils {
 
       Trace.WriteLine ($"Attempt to move\n{fileName}\nto\n{targetFileName}\n");
       try {
-        File.Move (fileName, targetFileName);
+        FileInfo fInfo = new FileInfo (fileName);
+        fInfo.MoveTo (targetFileName);
       } catch (System.Exception ex) {
         Trace.WriteLine ($"{ex.GetType()}: {ex.Message}");
       }
