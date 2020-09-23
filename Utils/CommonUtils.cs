@@ -134,7 +134,7 @@ namespace SteamData.Utils {
 
       if (!Directory.Exists (targetDirectory)) Directory.CreateDirectory (targetDirectory);
 
-      Trace.WriteLine ($"Move\n{fileName}\nto\n{targetFileName}\n");
+      Trace.WriteLine ($"Attempt to move\n{fileName}\nto\n{targetFileName}\n");
       try {
         File.Move (fileName, targetFileName);
       } catch (System.Exception ex) {
