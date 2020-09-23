@@ -74,18 +74,14 @@ namespace SteamData.HardwareSoftwareSurvey {
       int monthStart = MonthStringToInt (usageDetails.Rows[0][2].ToString ());
       int startYear = reportDate.Year;
       string category = usageDetails.Rows[0][1].ToString ();
-      int latestYearInDb = int.MinValue;
-      int latestYearMonthInDb = int.MinValue;
 
       if (monthStart > 8) startYear -= 1;
 
       var detailInDb = (
         from d in set orderby d.Year descending, d.Month descending select d).FirstOrDefault ();
 
-      if (detailInDb != null) {
-        latestYearInDb = detailInDb.Year;
-        latestYearMonthInDb = detailInDb.Month;
-      }
+      int latestYearInDb = detailInDb?.Year?? int.MinValue;
+      int latestYearMonthInDb = detailInDb?.Month?? int.MinValue;
 
       Debug.WriteLine ($"{ latestYearInDb }, { latestYearMonthInDb }");
 
