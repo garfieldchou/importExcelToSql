@@ -36,7 +36,7 @@ namespace importSteamToSql {
     [Option ("-w|--watch", Description = "Watch new files and import")]
     private bool watchMode { get; } = false;
 
-    private void OnExecute (CommandLineApplication app, CancellationToken cancellationToken = default) {
+    private void OnExecute () {
       Trace.WriteLine ($"Version {GetVersion()}");
       using (var steamDb = new SteamDataContext ()) {
         Trace.WriteLine ($"Send a query for Db connection test...");
