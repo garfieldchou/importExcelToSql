@@ -8,7 +8,7 @@ using SteamData.Utils;
 namespace SteamData.DownloadedStatistics {
   public sealed class DownloadedStatisticsUtils : ExcelContent, IDisposable, ICheckDuplicateHandling {
     public DownloadedStatisticsUtils (string filename) : base (filename) { }
-    private Dictionary<string, int> CountryIdMapping { get; set; } = new Dictionary<string, int> ();
+    private Dictionary<string, int> CountryIdMapping { get; } = new Dictionary<string, int> ();
     private void ImportCountryList (SteamDataContext db) {
       int affected = 0;
 
