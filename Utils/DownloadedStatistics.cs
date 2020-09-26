@@ -6,7 +6,7 @@ using System.Linq;
 using SteamData.Utils;
 
 namespace SteamData.DownloadedStatistics {
-  public class DownloadedStatisticsUtils : ExcelContent, IDisposable, ICheckDuplicateHandling {
+  public sealed class DownloadedStatisticsUtils : ExcelContent, IDisposable, ICheckDuplicateHandling {
     public DownloadedStatisticsUtils (string filename) : base (filename) { }
     private Dictionary<string, int> CountryIdMapping { get; set; } = new Dictionary<string, int> ();
     private void ImportCountryList (SteamDataContext db) {
