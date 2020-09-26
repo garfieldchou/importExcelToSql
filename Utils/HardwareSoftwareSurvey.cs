@@ -25,10 +25,10 @@ namespace SteamData.HardwareSoftwareSurvey {
         string item = survey[2].ToString ();
 
         db.HWSurveys.Add (new HWSurvey {
-          Year = ReportDate.Year,
-            Month = ReportDate.Month,
-            WorkWeek = ReportDate.GetIso8601WeekOfYear (),
-            Day = ReportDate.Day,
+          Year = ReportYear,
+            Month = ReportMonth,
+            WorkWeek = ReportWeek,
+            Day = ReportDay,
             Time = ReportDate,
             Category = category +
             (new Regex (@"^(Windows|OSX|Linux)$").IsMatch (item) &&
@@ -70,7 +70,7 @@ namespace SteamData.HardwareSoftwareSurvey {
     where T : class, ISurveyDetail, new () {
 
       int monthStart = MonthStringToInt (usageDetails.Rows[0][2].ToString ());
-      int startYear = ReportDate.Year;
+      int startYear = ReportYear;
       string category = usageDetails.Rows[0][1].ToString ();
 
       if (monthStart > 8) startYear -= 1;

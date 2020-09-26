@@ -14,6 +14,10 @@ namespace SteamData.Utils {
   public abstract class ExcelContent {
     protected DataSet Content { get; }
     protected DateTime ReportDate { get; }
+    protected int ReportYear => ReportDate.Year;
+    protected int ReportMonth => ReportDate.Month;
+    protected int ReportDay => ReportDate.Day;
+    protected int ReportWeek => ReportDate.GetIso8601WeekOfYear ();
 
     public ExcelContent (string filename) {
       ReportDate = DateTime.ParseExact (

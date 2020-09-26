@@ -112,10 +112,10 @@ namespace SteamData.DownloadedStatistics {
         }
 
         var dlStat = new CountryDLStatOverview {
-          Year = ReportDate.Year,
-          Month = ReportDate.Month,
-          WorkWeek = ReportDate.GetIso8601WeekOfYear (),
-          Day = ReportDate.Day,
+          Year = ReportYear,
+          Month = ReportMonth,
+          WorkWeek = ReportWeek,
+          Day = ReportDay,
           Time = ReportDate,
           TotalTb = ConvertTotalBytesTB (table.Rows[4][1].ToString ()),
           AvgDlSpeedMbps = ConvertDlSpeedToMB (table.Rows[4][2].ToString ()),

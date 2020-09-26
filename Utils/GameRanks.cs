@@ -60,10 +60,10 @@ namespace SteamData.GameRanks {
         if (!gameDetailsDict.TryGetValue (game, out int gameId)) gameId = 1;
 
         db.GameRanks.Add (new GameRank {
-          Year = ReportDate.Year,
-            Month = ReportDate.Month,
-            WorkWeek = ReportDate.GetIso8601WeekOfYear (),
-            Day = ReportDate.Day,
+          Year = ReportYear,
+            Month = ReportMonth,
+            WorkWeek = ReportWeek,
+            Day = ReportDay,
             Time = ReportDate,
             Ranks = rank,
             Players = players,
@@ -133,9 +133,9 @@ namespace SteamData.GameRanks {
 
         db.DetailsGamesReviewerHistory.Add (new DetailsGamesReviewerHistory {
           DetailsGameId = gameId,
-            RecordYear = ReportDate.Year,
-            RecordMonth = ReportDate.Month,
-            RecordWorkWeek = ReportDate.GetIso8601WeekOfYear (),
+            RecordYear = ReportYear,
+            RecordMonth = ReportMonth,
+            RecordWorkWeek = ReportWeek,
             DateTime = ReportDate,
             RecentReviews = detail[2].ToString (),
             AllReviews = detail[3].ToString ()
