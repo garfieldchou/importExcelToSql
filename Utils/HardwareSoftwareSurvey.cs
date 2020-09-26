@@ -10,12 +10,10 @@ using SteamData.Utils;
 
 namespace SteamData.HardwareSoftwareSurvey {
   public class HardwareSoftwareSurveyUtils : ExcelContent, IDisposable, ICheckDuplicateHandling {
-    public HardwareSoftwareSurveyUtils (string filename) {
-      GetExcelContent (filename);
-    }
+    public HardwareSoftwareSurveyUtils (string filename) : base (filename) { }
 
     private void ImportHWSurvey (SteamDataContext db) {
-      var hwsSurvey = content.Tables[0];
+      var hwsSurvey = Content.Tables[0];
       string category = string.Empty;
 
       for (int i = 1; i < hwsSurvey.Rows.Count; i++) {
@@ -27,11 +25,11 @@ namespace SteamData.HardwareSoftwareSurvey {
         string item = survey[2].ToString ();
 
         db.HWSurveys.Add (new HWSurvey {
-          Year = reportDate.Year,
-            Month = reportDate.Month,
-            WorkWeek = reportDate.GetIso8601WeekOfYear (),
-            Day = reportDate.Day,
-            Time = reportDate,
+          Year = ReportDate.Year,
+            Month = ReportDate.Month,
+            WorkWeek = ReportDate.GetIso8601WeekOfYear (),
+            Day = ReportDate.Day,
+            Time = ReportDate,
             Category = category +
             (new Regex (@"^(Windows|OSX|Linux)$").IsMatch (item) &&
               "OS Version" == category ?
@@ -45,25 +43,25 @@ namespace SteamData.HardwareSoftwareSurvey {
     }
 
     private void ImportPCVideoCardUsageDetail (SteamDataContext db) {
-      ImportUsageDetail (db.PCVideoCardUsageDetails, content.Tables[1]);
+      ImportUsageDetail (db.PCVideoCardUsageDetails, Content.Tables[1]);
       int affected = db.SaveChanges ();
       Trace.WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "PCVideoCardUsageDetail", affected));
     }
 
     private void ImportDirectXOS (SteamDataContext db) {
-      ImportUsageDetail (db.DirectXOSs, content.Tables[2]);
+      ImportUsageDetail (db.DirectXOSs, Content.Tables[2]);
       int affected = db.SaveChanges ();
       Trace.WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "DirectXOS", affected));
     }
 
     private void ImportProceUsageDetail (SteamDataContext db) {
-      ImportUsageDetail (db.ProceUsageDetails, content.Tables[3]);
+      ImportUsageDetail (db.ProceUsageDetails, Content.Tables[3]);
       int affected = db.SaveChanges ();
       Trace.WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "ProceUsageDetail", affected));
     }
 
     private void ImportPcPhyCpuDetail (SteamDataContext db) {
-      ImportUsageDetail (db.PcPhyCpuDetails, content.Tables[4]);
+      ImportUsageDetail (db.PcPhyCpuDetails, Content.Tables[4]);
       int affected = db.SaveChanges ();
       Trace.WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "PcPhyCpuDetail", affected));
     }
@@ -72,7 +70,7 @@ namespace SteamData.HardwareSoftwareSurvey {
     where T : class, ISurveyDetail, new () {
 
       int monthStart = MonthStringToInt (usageDetails.Rows[0][2].ToString ());
-      int startYear = reportDate.Year;
+      int startYear = ReportDate.Year;
       string category = usageDetails.Rows[0][1].ToString ();
 
       if (monthStart > 8) startYear -= 1;
@@ -131,9 +129,9 @@ namespace SteamData.HardwareSoftwareSurvey {
       }
     }
 
-    public bool IsHandledBefore (SteamDataContext targetDb) => targetDb.HWSurveys.Any (o => o.Time == reportDate);
+    public bool IsHandledBefore (SteamDataContext targetDb) => targetDb.HWSurveys.Any (o => o.Time == ReportDate);
 
-    public override void ImportTo (SteamDataContext db) {
+    public override void ExportTo (SteamDataContext db) {
       if (!IsHandledBefore (db)) {
         ImportHWSurvey (db);
         ImportPCVideoCardUsageDetail (db);

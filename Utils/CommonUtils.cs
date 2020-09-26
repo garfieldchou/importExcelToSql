@@ -11,11 +11,12 @@ using SteamData.HardwareSoftwareSurvey;
 using static System.IO.Path;
 
 namespace SteamData.Utils {
-  public class ExcelContent {
-    protected DataSet content { get; set; }
-    public DateTime reportDate { get; set; }
-    public void GetExcelContent (string filename) {
-      reportDate = DateTime.ParseExact (
+  public abstract class ExcelContent {
+    protected DataSet Content { get; }
+    protected DateTime ReportDate { get; }
+
+    public ExcelContent (string filename) {
+      ReportDate = DateTime.ParseExact (
         new Regex (@"\w+_(\d{8}).xlsx$")
         .Match (filename).Groups[1].Captures[0]
         .ToString (),
@@ -23,7 +24,7 @@ namespace SteamData.Utils {
 
       using (var stream = File.Open (filename, FileMode.Open, FileAccess.Read)) {
         using (var reader = ExcelReaderFactory.CreateReader (stream)) {
-          content = reader.AsDataSet (new ExcelDataSetConfiguration () {
+          Content = reader.AsDataSet (new ExcelDataSetConfiguration () {
             // Gets or sets a value indicating whether to set the DataColumn.DataType 
             // property in a second pass.
             UseColumnDataType = true,
@@ -66,7 +67,7 @@ namespace SteamData.Utils {
       }
     }
 
-    public virtual void ImportTo (SteamDataContext db) { }
+    public abstract void ExportTo (SteamDataContext db);
   }
   public static class CommonUtils {
     public static int GetIso8601WeekOfYear (this DateTime time) {
@@ -86,19 +87,19 @@ namespace SteamData.Utils {
   public static class DbContextExtensions {
     public static void ImportDownloadedStatistics (this SteamDataContext db, string fileName) {
       using (var downloadedStatistics = new DownloadedStatisticsUtils (fileName)) {
-        downloadedStatistics.ImportTo (db);
+        downloadedStatistics.ExportTo (db);
       }
     }
 
     public static void ImportGameRank (this SteamDataContext db, string fileName) {
       using (var gameRank = new GameRanksUtils (fileName)) {
-        gameRank.ImportTo (db);
+        gameRank.ExportTo (db);
       }
     }
 
     public static void ImportHardwareSoftwareSurvey (this SteamDataContext db, string fileName) {
       using (var hardwareSoftwareSurvey = new HardwareSoftwareSurveyUtils (fileName)) {
-        hardwareSoftwareSurvey.ImportTo (db);
+        hardwareSoftwareSurvey.ExportTo (db);
       }
     }
 

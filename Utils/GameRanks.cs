@@ -8,12 +8,10 @@ using static System.Globalization.NumberStyles;
 
 namespace SteamData.GameRanks {
   public class GameRanksUtils : ExcelContent, IDisposable, ICheckDuplicateHandling {
-    public GameRanksUtils (string filename) {
-      GetExcelContent (filename);
-    }
+    public GameRanksUtils (string filename) : base (filename) { }
 
     private void ImportOnlineStat (SteamDataContext db) {
-      var onlineStat = content.Tables[0];
+      var onlineStat = Content.Tables[0];
 
       DateTime[] stat = (
         from d in db.OnlineStats
@@ -42,7 +40,7 @@ namespace SteamData.GameRanks {
     }
 
     private void ImportGameRanks (SteamDataContext db) {
-      var gameRank = content.Tables[1];
+      var gameRank = Content.Tables[1];
       var gameDetailsDict = new Dictionary<string, int> ();
       IQueryable<DetailsGame> gameDetails = db.DetailsGames;
 
@@ -62,11 +60,11 @@ namespace SteamData.GameRanks {
         if (!gameDetailsDict.TryGetValue (game, out int gameId)) gameId = 1;
 
         db.GameRanks.Add (new GameRank {
-          Year = reportDate.Year,
-            Month = reportDate.Month,
-            WorkWeek = reportDate.GetIso8601WeekOfYear (),
-            Day = reportDate.Day,
-            Time = reportDate,
+          Year = ReportDate.Year,
+            Month = ReportDate.Month,
+            WorkWeek = ReportDate.GetIso8601WeekOfYear (),
+            Day = ReportDate.Day,
+            Time = ReportDate,
             Ranks = rank,
             Players = players,
             Peak = peak,
@@ -80,7 +78,7 @@ namespace SteamData.GameRanks {
     }
 
     private void ImportDetailsGame (SteamDataContext db) {
-      var gameDetails = content.Tables[2];
+      var gameDetails = Content.Tables[2];
       for (int i = 1; i < gameDetails.Rows.Count; i++) {
         DataRow detail = gameDetails.Rows[i];
         DateTime releaseDate = DateTime.Parse (detail[4].ToString ());
@@ -125,7 +123,7 @@ namespace SteamData.GameRanks {
         gameDetailsDict.Add (detail.Game, detail.DetailsGameId);
       }
 
-      var gameDetails = content.Tables[2];
+      var gameDetails = Content.Tables[2];
       for (int i = 1; i < gameDetails.Rows.Count; i++) {
         DataRow detail = gameDetails.Rows[i];
         DateTime releaseDate = DateTime.Parse (detail[4].ToString ());
@@ -135,10 +133,10 @@ namespace SteamData.GameRanks {
 
         db.DetailsGamesReviewerHistory.Add (new DetailsGamesReviewerHistory {
           DetailsGameId = gameId,
-            RecordYear = reportDate.Year,
-            RecordMonth = reportDate.Month,
-            RecordWorkWeek = reportDate.GetIso8601WeekOfYear (),
-            DateTime = reportDate,
+            RecordYear = ReportDate.Year,
+            RecordMonth = ReportDate.Month,
+            RecordWorkWeek = ReportDate.GetIso8601WeekOfYear (),
+            DateTime = ReportDate,
             RecentReviews = detail[2].ToString (),
             AllReviews = detail[3].ToString ()
         });
@@ -147,9 +145,9 @@ namespace SteamData.GameRanks {
       Trace.WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "DetailsGamesReviewerHistory", affected));
     }
 
-    public bool IsHandledBefore (SteamDataContext targetDb) => targetDb.DetailsGamesReviewerHistory.Any (o => o.DateTime == reportDate);
+    public bool IsHandledBefore (SteamDataContext targetDb) => targetDb.DetailsGamesReviewerHistory.Any (o => o.DateTime == ReportDate);
 
-    public override void ImportTo (SteamDataContext db) {
+    public override void ExportTo (SteamDataContext db) {
       if (!IsHandledBefore (db)) {
         ImportOnlineStat (db);
         ImportDetailsGame (db);

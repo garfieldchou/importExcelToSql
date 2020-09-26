@@ -7,14 +7,12 @@ using SteamData.Utils;
 
 namespace SteamData.DownloadedStatistics {
   public class DownloadedStatisticsUtils : ExcelContent, IDisposable, ICheckDuplicateHandling {
-    public DownloadedStatisticsUtils (string filename) {
-      GetExcelContent (filename);
-    }
+    public DownloadedStatisticsUtils (string filename) : base (filename) { }
     private Dictionary<string, int> CountryIdMapping { get; set; } = new Dictionary<string, int> ();
     private void ImportCountryList (SteamDataContext db) {
       int affected = 0;
 
-      foreach (DataTable item in content.Tables) {
+      foreach (DataTable item in Content.Tables) {
         if (item.ToString () == "BandWidth Data") continue;
 
         string country = item.Rows[1][1].ToString ();
@@ -35,7 +33,7 @@ namespace SteamData.DownloadedStatistics {
       }
     }
     private void ImportRegionDLStatDetail (SteamDataContext db) {
-      var bwDetails = content.Tables[0];
+      var bwDetails = Content.Tables[0];
       int columnCount = bwDetails.Columns.Count;
 
       DateTime[] detail = (
@@ -105,7 +103,7 @@ namespace SteamData.DownloadedStatistics {
       Trace.WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "RegionDLStatOverview", affected));
     }
     private void ImportCountryDLStatOverview (SteamDataContext db) {
-      foreach (DataTable table in content.Tables) {
+      foreach (DataTable table in Content.Tables) {
         if ("BandWidth Data" == table.ToString ()) continue;
 
         string country = (string) table.Rows[1][1];
@@ -114,11 +112,11 @@ namespace SteamData.DownloadedStatistics {
         }
 
         var dlStat = new CountryDLStatOverview {
-          Year = reportDate.Year,
-          Month = reportDate.Month,
-          WorkWeek = reportDate.GetIso8601WeekOfYear (),
-          Day = reportDate.Day,
-          Time = reportDate,
+          Year = ReportDate.Year,
+          Month = ReportDate.Month,
+          WorkWeek = ReportDate.GetIso8601WeekOfYear (),
+          Day = ReportDate.Day,
+          Time = ReportDate,
           TotalTb = ConvertTotalBytesTB (table.Rows[4][1].ToString ()),
           AvgDlSpeedMbps = ConvertDlSpeedToMB (table.Rows[4][2].ToString ()),
           SteamPercent = Decimal.Parse (((string) (table.Rows[4][3])).Split ('%') [0]),
@@ -131,7 +129,7 @@ namespace SteamData.DownloadedStatistics {
       Trace.WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "CountryDLStatOverview", affected));
     }
     private void ImportCountryNetworkDLStat (SteamDataContext db) {
-      foreach (DataTable table in content.Tables) {
+      foreach (DataTable table in Content.Tables) {
         if ("BandWidth Data" == table.ToString ()) continue;
 
         string country = (string) table.Rows[1][1];
@@ -142,7 +140,7 @@ namespace SteamData.DownloadedStatistics {
         for (int i = 9; i < table.Rows.Count; i++) {
           string network = table.Rows[i][1].ToString ();
           var networkDlStat = new CountryNetworkDLStat {
-            Time = reportDate,
+            Time = ReportDate,
             Network = network,
             AvgDlSpeedMbps = Decimal.Parse (((string) (table.Rows[i][2])).Split (' ') [0]),
             CountryListId = countryId
@@ -154,9 +152,9 @@ namespace SteamData.DownloadedStatistics {
       Trace.WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "CountryNetworkDLStat", affected));
     }
 
-    public bool IsHandledBefore (SteamDataContext targetDb) => targetDb.CountryDLStatOverviews.Any (o => o.Time == reportDate);
+    public bool IsHandledBefore (SteamDataContext targetDb) => targetDb.CountryDLStatOverviews.Any (o => o.Time == ReportDate);
 
-    public override void ImportTo (SteamDataContext db) {
+    public override void ExportTo (SteamDataContext db) {
       if (!IsHandledBefore (db)) {
         ImportCountryList (db);
         ImportRegionDLStatDetail (db);
