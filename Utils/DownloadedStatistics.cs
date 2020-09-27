@@ -152,10 +152,11 @@ namespace SteamData.DownloadedStatistics {
       Trace.WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "CountryNetworkDLStat", affected));
     }
 
-    public bool IsHandledBefore (SteamDataContext targetDb) => targetDb.CountryDLStatOverviews.Any (o => o.Time == ReportDate);
+    bool ICheckDuplicateHandling.IsHandledBefore (SteamDataContext targetDb) =>
+      targetDb.CountryDLStatOverviews.Any (o => o.Time == ReportDate);
 
     public override void ExportTo (SteamDataContext db) {
-      if (!IsHandledBefore (db)) {
+      if (!((ICheckDuplicateHandling) this).IsHandledBefore (db)) {
         ImportCountryList (db);
         ImportRegionDLStatDetail (db);
         ImportCountryDLStatOverview (db);

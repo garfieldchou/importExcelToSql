@@ -129,10 +129,11 @@ namespace SteamData.HardwareSoftwareSurvey {
       }
     }
 
-    public bool IsHandledBefore (SteamDataContext targetDb) => targetDb.HWSurveys.Any (o => o.Time == ReportDate);
+    bool ICheckDuplicateHandling.IsHandledBefore (SteamDataContext targetDb) =>
+      targetDb.HWSurveys.Any (o => o.Time == ReportDate);
 
     public override void ExportTo (SteamDataContext db) {
-      if (!IsHandledBefore (db)) {
+      if (!((ICheckDuplicateHandling) this).IsHandledBefore (db)) {
         ImportHWSurvey (db);
         ImportPCVideoCardUsageDetail (db);
         ImportDirectXOS (db);

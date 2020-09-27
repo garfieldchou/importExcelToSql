@@ -145,10 +145,11 @@ namespace SteamData.GameRanks {
       Trace.WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "DetailsGamesReviewerHistory", affected));
     }
 
-    public bool IsHandledBefore (SteamDataContext targetDb) => targetDb.DetailsGamesReviewerHistory.Any (o => o.DateTime == ReportDate);
+    bool ICheckDuplicateHandling.IsHandledBefore (SteamDataContext targetDb) =>
+      targetDb.DetailsGamesReviewerHistory.Any (o => o.DateTime == ReportDate);
 
     public override void ExportTo (SteamDataContext db) {
-      if (!IsHandledBefore (db)) {
+      if (!((ICheckDuplicateHandling) this).IsHandledBefore (db)) {
         ImportOnlineStat (db);
         ImportDetailsGame (db);
         ImportDetailsGamesReviewerHistory (db);
