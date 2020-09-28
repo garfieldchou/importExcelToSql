@@ -36,7 +36,7 @@ namespace SteamData.GameRanks {
         }
       }
       int affected = db.SaveChanges ();
-      Trace.WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "OnlineStat", affected));
+      Trace.WriteLine (($"{nameof (OnlineStat),-28}| import {affected,6:N0} items"));
     }
 
     private void ImportGameRanks (SteamDataContext db) {
@@ -74,7 +74,7 @@ namespace SteamData.GameRanks {
         });
       }
       int affected = db.SaveChanges ();
-      Trace.WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "GameRank", affected));
+      Trace.WriteLine (($"{nameof (GameRank),-28}| import {affected,6:N0} items"));
     }
 
     private void ImportDetailsGame (SteamDataContext db) {
@@ -114,7 +114,7 @@ namespace SteamData.GameRanks {
         }
       }
       int affected = db.SaveChanges ();
-      Trace.WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "DetailsGame", affected));
+      Trace.WriteLine (($"{nameof (DetailsGame),-28}| import {affected,6:N0} items"));
     }
 
     private void ImportDetailsGamesReviewerHistory (SteamDataContext db) {
@@ -142,7 +142,7 @@ namespace SteamData.GameRanks {
         });
       }
       int affected = db.SaveChanges ();
-      Trace.WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "DetailsGamesReviewerHistory", affected));
+      Trace.WriteLine (($"{nameof (DetailsGamesReviewerHistory),-28}| import {affected,6:N0} items"));
     }
 
     bool ICheckDuplicateHandling.IsHandledBefore (SteamDataContext targetDb) =>

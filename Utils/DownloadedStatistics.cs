@@ -25,7 +25,7 @@ namespace SteamData.DownloadedStatistics {
       }
       affected += db.SaveChanges ();
 
-      Trace.WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "CountryList", affected));
+      Trace.WriteLine (($"{nameof (CountryList),-28}| import {affected,6:N0} items"));
 
       // Populate the latest Country-ID mapping for the future uses
       foreach (var country in db.CountryLists) {
@@ -68,7 +68,7 @@ namespace SteamData.DownloadedStatistics {
         }
       }
       int affected = db.SaveChanges ();
-      Trace.WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "RegionDLStatDetail", affected));
+      Trace.WriteLine (($"{nameof (RegionDLStatDetail),-28}| import {affected,6:N0} items"));
 
       // aggregate before save changes
       var query = db.RegionDLStatDetails
@@ -100,7 +100,7 @@ namespace SteamData.DownloadedStatistics {
         }
       }
       affected = db.SaveChanges ();
-      Trace.WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "RegionDLStatOverview", affected));
+      Trace.WriteLine (($"{nameof (RegionDLStatOverview),-28}| import {affected,6:N0} items"));
     }
     private void ImportCountryDLStatOverview (SteamDataContext db) {
       foreach (DataTable table in Content.Tables) {
@@ -126,7 +126,7 @@ namespace SteamData.DownloadedStatistics {
         db.CountryDLStatOverviews.Add (dlStat);
       }
       int affected = db.SaveChanges ();
-      Trace.WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "CountryDLStatOverview", affected));
+      Trace.WriteLine (($"{nameof (CountryDLStatOverview),-28}| import {affected,6:N0} items"));
     }
     private void ImportCountryNetworkDLStat (SteamDataContext db) {
       foreach (DataTable table in Content.Tables) {
@@ -149,7 +149,7 @@ namespace SteamData.DownloadedStatistics {
         }
       }
       int affected = db.SaveChanges ();
-      Trace.WriteLine (string.Format ("{0,-28}| import {1,6:N0} items", "CountryNetworkDLStat", affected));
+      Trace.WriteLine (($"{nameof (CountryNetworkDLStat),-28}| import {affected,6:N0} items"));
     }
 
     bool ICheckDuplicateHandling.IsHandledBefore (SteamDataContext targetDb) =>
