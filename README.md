@@ -26,7 +26,27 @@ DB_NAME=Steam
 DB_MULTI_ACTIVE_RES_SET=True
 ```
 
+## [Entity Framework Core CLI](https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/dotnet)
+
+[Add a Tool Manifest File](https://docs.microsoft.com/en-us/dotnet/core/tools/global-tools#install-a-local-tool)
+
+```
+$ dotnet new tool-manifest
+```
+
+[Install dotnet-ef tool](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-tool-install)
+
+```
+$ dotnet tool install dotnet-ef
+```
+
 ## Database Migration
+
+[Create a migration file](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli#create-your-first-migration)
+
+```
+dotnet ef migrations add InitialCreate
+```
 
 Reset the database
 
