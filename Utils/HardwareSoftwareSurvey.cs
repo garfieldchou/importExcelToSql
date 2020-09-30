@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using SteamData.Utils;
 
 namespace SteamData.HardwareSoftwareSurvey {
-  public sealed class HardwareSoftwareSurveyUtils : ExcelContent, ICheckDuplicateHandling {
-    public HardwareSoftwareSurveyUtils (string filename) : base (filename) { }
+  public sealed class HardwareSoftwareSurveyContent : ExcelContent, ICheckDuplicateHandling {
+    public HardwareSoftwareSurveyContent (string filename) : base (filename) { }
 
     private void ImportHWSurvey (SteamDataContext db) {
       var hwsSurvey = Content.Tables[0];

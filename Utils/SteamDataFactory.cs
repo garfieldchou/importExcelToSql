@@ -14,10 +14,10 @@ namespace SteamData {
 
       return category
       switch {
-        "DownloadedStatistics" => new DownloadedStatisticsUtils (fileName),
-          "GameRanks" => new GameRanksUtils (fileName),
+        "DownloadedStatistics" => new DownloadedStatisticsContent (fileName),
+          "GameRanks" => new GameRanksContent (fileName),
           var c when c == "Hardware_Software" ||
-            c == "HWSSurvey" => new HardwareSoftwareSurveyUtils (fileName),
+            c == "HWSSurvey" => new HardwareSoftwareSurveyContent (fileName),
             _ => null
       };
     }

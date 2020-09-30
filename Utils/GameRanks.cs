@@ -7,8 +7,8 @@ using SteamData.Utils;
 using static System.Globalization.NumberStyles;
 
 namespace SteamData.GameRanks {
-  public sealed class GameRanksUtils : ExcelContent, ICheckDuplicateHandling {
-    public GameRanksUtils (string filename) : base (filename) { }
+  public sealed class GameRanksContent : ExcelContent, ICheckDuplicateHandling {
+    public GameRanksContent (string filename) : base (filename) { }
 
     private void ImportOnlineStat (SteamDataContext db) {
       var onlineStat = Content.Tables[0];
