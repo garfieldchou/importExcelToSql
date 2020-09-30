@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SteamData.DownloadedStatistics;
 using SteamData.GameRanks;
 using SteamData.HardwareSoftwareSurvey;
+using static DotNetEnv.Env;
 
 namespace SteamData {
   public class SteamDataContext : DbContext {
@@ -27,24 +28,24 @@ namespace SteamData {
     public DbSet<PcPhyCpuDetail> PcPhyCpuDetails { get; set; }
 
     protected override void OnConfiguring (DbContextOptionsBuilder optionsBuilder) {
-      DotNetEnv.Env.Load ();
+      Load ();
 
       string connectionString =
-        DotNetEnv.Env.GetBool ("DB_INTEGRATED_SECURITY") &&
-        DotNetEnv.Env.GetString ("DOTNET_ENV") == "prod" ?
+        GetBool ("DB_INTEGRATED_SECURITY") &&
+        GetString ("DOTNET_ENV") == "prod" ?
         string.Format ("Server={0};Database={1};Integrated Security={2};MultipleActiveResultSets={3}",
-          DotNetEnv.Env.GetString ("DB_SERVER"),
-          DotNetEnv.Env.GetString ("DB_NAME"),
-          DotNetEnv.Env.GetBool ("DB_INTEGRATED_SECURITY"),
-          DotNetEnv.Env.GetBool ("DB_MULTI_ACTIVE_RES_SET")
+          GetString ("DB_SERVER"),
+          GetString ("DB_NAME"),
+          GetBool ("DB_INTEGRATED_SECURITY"),
+          GetBool ("DB_MULTI_ACTIVE_RES_SET")
         ) :
         string.Format ("Server={0};Database={1};Integrated Security={2};User ID={3};Password={4};MultipleActiveResultSets={5}",
-          DotNetEnv.Env.GetString ("DB_SERVER"),
-          DotNetEnv.Env.GetString ("DB_NAME"),
-          DotNetEnv.Env.GetBool ("DB_INTEGRATED_SECURITY"),
-          DotNetEnv.Env.GetString ("DB_SERVER_USER"),
-          DotNetEnv.Env.GetString ("DB_SERVER_PASSWORD"),
-          DotNetEnv.Env.GetBool ("DB_MULTI_ACTIVE_RES_SET")
+          GetString ("DB_SERVER"),
+          GetString ("DB_NAME"),
+          GetBool ("DB_INTEGRATED_SECURITY"),
+          GetString ("DB_SERVER_USER"),
+          GetString ("DB_SERVER_PASSWORD"),
+          GetBool ("DB_MULTI_ACTIVE_RES_SET")
         );
 
       optionsBuilder.UseSqlServer (connectionString);
