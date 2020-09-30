@@ -6,7 +6,7 @@ using SteamData.Utils;
 
 namespace SteamData {
   public static class SteamDataFactory {
-    public static ExcelContent GetStreamData (string fileName) {
+    public static ExcelContent GetStreamDataFrom (string fileName) {
       string category =
         new Regex (@"(DownloadedStatistics|GameRanks|HWSSurvey|Hardware_Software)_\d{8}.xlsx$")
         .Match (fileName).Groups[1].Captures[0]

@@ -1,12 +1,9 @@
 using System;
 using System.Data;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 using ExcelDataReader;
-using static SteamData.SteamDataFactory;
-using static System.IO.Path;
 
 namespace SteamData.Utils {
   public abstract class ExcelContent {
@@ -83,30 +80,6 @@ namespace SteamData.Utils {
 
       // Return the week of our adjusted day
       return CultureInfo.InvariantCulture.Calendar.GetWeekOfYear (time, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
-    }
-  }
-
-  public static class DbContextExtensions {
-    public static void ImportSteamDataFrom (this SteamDataContext db, string fileName) {
-      GetStreamData (fileName).ExportTo (db);
-
-      string targetDirectory = Combine (
-        GetDirectoryName (fileName),
-        "..", "Processed");
-
-      string targetFileName = Combine (
-        targetDirectory,
-        GetFileName (fileName));
-
-      if (!Directory.Exists (targetDirectory)) Directory.CreateDirectory (targetDirectory);
-
-      Trace.WriteLine ($"Attempt to move\n{fileName}\nto\n{targetFileName}\n");
-      try {
-        FileInfo fInfo = new FileInfo (fileName);
-        fInfo.MoveTo (targetFileName);
-      } catch (System.Exception ex) {
-        Trace.WriteLine ($"{ex.GetType()}: {ex.Message}");
-      }
     }
   }
 }

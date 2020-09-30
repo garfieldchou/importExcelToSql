@@ -6,10 +6,10 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
 using McMaster.Extensions.CommandLineUtils;
 using SteamData;
-using SteamData.Utils;
+using static SteamData.SteamDataFactory;
+using static System.IO.Path;
 
 namespace importSteamToSql {
   [Command (Name = "importSteamToSql", Description = "Import Steam data from xlsx to MS SQL server")]
@@ -90,7 +90,28 @@ namespace importSteamToSql {
       Encoding.RegisterProvider (CodePagesEncodingProvider.Instance);
 
       using (var steamDb = new SteamDataContext ()) {
-        steamDb.ImportSteamDataFrom (fileName);
+        GetStreamDataFrom (fileName).ExportTo (steamDb);
+        MoveProcessedFile (fileName);
+      }
+    }
+
+    public static void MoveProcessedFile (string fileName) {
+      string targetDirectory = Combine (
+        GetDirectoryName (fileName),
+        "..", "Processed");
+
+      string targetFileName = Combine (
+        targetDirectory,
+        GetFileName (fileName));
+
+      if (!Directory.Exists (targetDirectory)) Directory.CreateDirectory (targetDirectory);
+
+      Trace.WriteLine ($"Attempt to move\n{fileName}\nto\n{targetFileName}\n");
+      try {
+        FileInfo fInfo = new FileInfo (fileName);
+        fInfo.MoveTo (targetFileName);
+      } catch (System.Exception ex) {
+        Trace.WriteLine ($"{ex.GetType()}: {ex.Message}");
       }
     }
 
