@@ -5,9 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 using ExcelDataReader;
-using SteamData.DownloadedStatistics;
-using SteamData.GameRanks;
-using SteamData.HardwareSoftwareSurvey;
+using static SteamData.SteamDataFactory;
 using static System.IO.Path;
 
 namespace SteamData.Utils {
@@ -89,45 +87,8 @@ namespace SteamData.Utils {
   }
 
   public static class DbContextExtensions {
-    public static void ImportDownloadedStatistics (this SteamDataContext db, string fileName) {
-      using (var downloadedStatistics = new DownloadedStatisticsUtils (fileName)) {
-        downloadedStatistics.ExportTo (db);
-      }
-    }
-
-    public static void ImportGameRank (this SteamDataContext db, string fileName) {
-      using (var gameRank = new GameRanksUtils (fileName)) {
-        gameRank.ExportTo (db);
-      }
-    }
-
-    public static void ImportHardwareSoftwareSurvey (this SteamDataContext db, string fileName) {
-      using (var hardwareSoftwareSurvey = new HardwareSoftwareSurveyUtils (fileName)) {
-        hardwareSoftwareSurvey.ExportTo (db);
-      }
-    }
-
     public static void ImportSteamDataFrom (this SteamDataContext db, string fileName) {
-      string category =
-        new Regex (@"(DownloadedStatistics|GameRanks|HWSSurvey|Hardware_Software)_\d{8}.xlsx$")
-        .Match (fileName).Groups[1].Captures[0]
-        .ToString ();
-
-      switch (category) {
-        case "DownloadedStatistics":
-          db.ImportDownloadedStatistics (fileName);
-          break;
-        case "GameRanks":
-          db.ImportGameRank (fileName);
-          break;
-        case "HWSSurvey":
-        case "Hardware_Software":
-          db.ImportHardwareSoftwareSurvey (fileName);
-          break;
-        default:
-          Trace.WriteLine ("Category not found.");
-          break;
-      }
+      GetStreamData (fileName).ExportTo (db);
 
       string targetDirectory = Combine (
         GetDirectoryName (fileName),

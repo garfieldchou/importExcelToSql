@@ -7,7 +7,7 @@ using SteamData.Utils;
 using static System.Globalization.NumberStyles;
 
 namespace SteamData.GameRanks {
-  public sealed class GameRanksUtils : ExcelContent, IDisposable, ICheckDuplicateHandling {
+  public sealed class GameRanksUtils : ExcelContent, ICheckDuplicateHandling {
     public GameRanksUtils (string filename) : base (filename) { }
 
     private void ImportOnlineStat (SteamDataContext db) {
@@ -158,7 +158,5 @@ namespace SteamData.GameRanks {
         Trace.WriteLine ($"Skip importing file handled before");
       }
     }
-
-    public void Dispose () { }
   }
 }

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using SteamData.Utils;
 
 namespace SteamData.HardwareSoftwareSurvey {
-  public sealed class HardwareSoftwareSurveyUtils : ExcelContent, IDisposable, ICheckDuplicateHandling {
+  public sealed class HardwareSoftwareSurveyUtils : ExcelContent, ICheckDuplicateHandling {
     public HardwareSoftwareSurveyUtils (string filename) : base (filename) { }
 
     private void ImportHWSurvey (SteamDataContext db) {
@@ -157,7 +157,5 @@ namespace SteamData.HardwareSoftwareSurvey {
       { "NOV", 11 },
       { "DEC", 12 }
     }[month];
-
-    public void Dispose () { }
   }
 }
