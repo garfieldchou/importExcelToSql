@@ -10,7 +10,7 @@ namespace SteamData.GameRanks {
   public sealed class GameRanksContent : ExcelContent, ICheckDuplicateHandling {
     public GameRanksContent (string filename) : base (filename) { }
 
-    private void ImportOnlineStat (SteamDataContext db) {
+    private void ExportOnlineStatTo (SteamDataContext db) {
       var onlineStat = Content.Tables[0];
 
       DateTime[] stat = (
@@ -39,7 +39,7 @@ namespace SteamData.GameRanks {
       Trace.WriteLine (($"{nameof (OnlineStat),-28}| import {affected,6:N0} items"));
     }
 
-    private void ImportGameRanks (SteamDataContext db) {
+    private void ExportGameRanksTo (SteamDataContext db) {
       var gameRank = Content.Tables[1];
       var gameDetailsDict = new Dictionary<string, int> ();
       IQueryable<DetailsGame> gameDetails = db.DetailsGames;
@@ -77,7 +77,7 @@ namespace SteamData.GameRanks {
       Trace.WriteLine (($"{nameof (GameRank),-28}| import {affected,6:N0} items"));
     }
 
-    private void ImportDetailsGame (SteamDataContext db) {
+    private void ExportDetailsGameTo (SteamDataContext db) {
       var gameDetails = Content.Tables[2];
       for (int i = 1; i < gameDetails.Rows.Count; i++) {
         DataRow detail = gameDetails.Rows[i];
@@ -117,7 +117,7 @@ namespace SteamData.GameRanks {
       Trace.WriteLine (($"{nameof (DetailsGame),-28}| import {affected,6:N0} items"));
     }
 
-    private void ImportDetailsGamesReviewerHistory (SteamDataContext db) {
+    private void ExportDetailsGamesReviewerHistoryTo (SteamDataContext db) {
       var gameDetailsDict = new Dictionary<string, int> ();
       foreach (var detail in db.DetailsGames) {
         gameDetailsDict.Add (detail.Game, detail.DetailsGameId);
@@ -150,10 +150,10 @@ namespace SteamData.GameRanks {
 
     public override void ExportTo (SteamDataContext db) {
       if (!((ICheckDuplicateHandling) this).IsHandledBefore (db)) {
-        ImportOnlineStat (db);
-        ImportDetailsGame (db);
-        ImportDetailsGamesReviewerHistory (db);
-        ImportGameRanks (db);
+        ExportOnlineStatTo (db);
+        ExportDetailsGameTo (db);
+        ExportDetailsGamesReviewerHistoryTo (db);
+        ExportGameRanksTo (db);
       } else {
         Trace.WriteLine ($"Skip importing file handled before");
       }

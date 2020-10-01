@@ -9,7 +9,7 @@ namespace SteamData.DownloadedStatistics {
   public sealed class DownloadedStatisticsContent : ExcelContent, ICheckDuplicateHandling {
     public DownloadedStatisticsContent (string filename) : base (filename) { }
     private Dictionary<string, int> CountryIdMapping { get; } = new Dictionary<string, int> ();
-    private void ImportCountryList (SteamDataContext db) {
+    private void ExportCountryListTo (SteamDataContext db) {
       int affected = 0;
 
       foreach (DataTable item in Content.Tables) {
@@ -32,7 +32,7 @@ namespace SteamData.DownloadedStatistics {
         CountryIdMapping.TryAdd (country.Country, country.CountryListId);
       }
     }
-    private void ImportRegionDLStatDetail (SteamDataContext db) {
+    private void ExportRegionDLStatDetailTo (SteamDataContext db) {
       var bwDetails = Content.Tables[0];
       int columnCount = bwDetails.Columns.Count;
 
@@ -102,7 +102,7 @@ namespace SteamData.DownloadedStatistics {
       affected = db.SaveChanges ();
       Trace.WriteLine (($"{nameof (RegionDLStatOverview),-28}| import {affected,6:N0} items"));
     }
-    private void ImportCountryDLStatOverview (SteamDataContext db) {
+    private void ExportCountryDLStatOverviewTo (SteamDataContext db) {
       foreach (DataTable table in Content.Tables) {
         if ("BandWidth Data" == table.ToString ()) continue;
 
@@ -128,7 +128,7 @@ namespace SteamData.DownloadedStatistics {
       int affected = db.SaveChanges ();
       Trace.WriteLine (($"{nameof (CountryDLStatOverview),-28}| import {affected,6:N0} items"));
     }
-    private void ImportCountryNetworkDLStat (SteamDataContext db) {
+    private void ExportCountryNetworkDLStatTo (SteamDataContext db) {
       foreach (DataTable table in Content.Tables) {
         if ("BandWidth Data" == table.ToString ()) continue;
 
@@ -157,10 +157,10 @@ namespace SteamData.DownloadedStatistics {
 
     public override void ExportTo (SteamDataContext db) {
       if (!((ICheckDuplicateHandling) this).IsHandledBefore (db)) {
-        ImportCountryList (db);
-        ImportRegionDLStatDetail (db);
-        ImportCountryDLStatOverview (db);
-        ImportCountryNetworkDLStat (db);
+        ExportCountryListTo (db);
+        ExportRegionDLStatDetailTo (db);
+        ExportCountryDLStatOverviewTo (db);
+        ExportCountryNetworkDLStatTo (db);
       } else {
         Trace.WriteLine ($"Skip importing file handled before");
       }

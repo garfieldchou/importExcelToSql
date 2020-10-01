@@ -12,7 +12,7 @@ namespace SteamData.HardwareSoftwareSurvey {
   public sealed class HardwareSoftwareSurveyContent : ExcelContent, ICheckDuplicateHandling {
     public HardwareSoftwareSurveyContent (string filename) : base (filename) { }
 
-    private void ImportHWSurvey (SteamDataContext db) {
+    private void ExportHWSurveyTo (SteamDataContext db) {
       var hwsSurvey = Content.Tables[0];
       string category = string.Empty;
 
@@ -42,25 +42,25 @@ namespace SteamData.HardwareSoftwareSurvey {
       Trace.WriteLine (($"{nameof (HWSurvey),-28}| import {affected,6:N0} items"));
     }
 
-    private void ImportPCVideoCardUsageDetail (SteamDataContext db) {
+    private void ExportPCVideoCardUsageDetailTo (SteamDataContext db) {
       ImportUsageDetail (db.PCVideoCardUsageDetails, Content.Tables[1]);
       int affected = db.SaveChanges ();
       Trace.WriteLine (($"{nameof (PCVideoCardUsageDetail),-28}| import {affected,6:N0} items"));
     }
 
-    private void ImportDirectXOS (SteamDataContext db) {
+    private void ExportDirectXOSTo (SteamDataContext db) {
       ImportUsageDetail (db.DirectXOSs, Content.Tables[2]);
       int affected = db.SaveChanges ();
       Trace.WriteLine (($"{nameof (DirectXOS),-28}| import {affected,6:N0} items"));
     }
 
-    private void ImportProceUsageDetail (SteamDataContext db) {
+    private void ExportProceUsageDetailTo (SteamDataContext db) {
       ImportUsageDetail (db.ProceUsageDetails, Content.Tables[3]);
       int affected = db.SaveChanges ();
       Trace.WriteLine (($"{nameof (ProceUsageDetail),-28}| import {affected,6:N0} items"));
     }
 
-    private void ImportPcPhyCpuDetail (SteamDataContext db) {
+    private void ExportPcPhyCpuDetailTo (SteamDataContext db) {
       ImportUsageDetail (db.PcPhyCpuDetails, Content.Tables[4]);
       int affected = db.SaveChanges ();
       Trace.WriteLine (($"{nameof (PcPhyCpuDetail),-28}| import {affected,6:N0} items"));
@@ -134,11 +134,11 @@ namespace SteamData.HardwareSoftwareSurvey {
 
     public override void ExportTo (SteamDataContext db) {
       if (!((ICheckDuplicateHandling) this).IsHandledBefore (db)) {
-        ImportHWSurvey (db);
-        ImportPCVideoCardUsageDetail (db);
-        ImportDirectXOS (db);
-        ImportProceUsageDetail (db);
-        ImportPcPhyCpuDetail (db);
+        ExportHWSurveyTo (db);
+        ExportPCVideoCardUsageDetailTo (db);
+        ExportDirectXOSTo (db);
+        ExportProceUsageDetailTo (db);
+        ExportPcPhyCpuDetailTo (db);
       } else {
         Trace.WriteLine ($"Skip importing file handled before");
       }

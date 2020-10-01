@@ -1,4 +1,4 @@
-# Import Steam Data to MS SQL Server
+# Export Steam Data to MS SQL Server
 
 ## Use environment variables to configure connection string
 
