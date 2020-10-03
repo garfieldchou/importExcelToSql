@@ -12,10 +12,10 @@ namespace SteamData.DownloadedStatistics {
     private void ExportCountryListTo (SteamDataContext db) {
       int affected = 0;
 
-      foreach (DataTable item in Content.Tables) {
-        if (item.ToString () == "BandWidth Data") continue;
+      foreach (DataTable table in Content.Tables) {
+        if ("BandWidth Data" == table.TableName) continue;
 
-        string country = item.Rows[1][1].ToString ();
+        string country = table.Rows[1][1].ToString ();
 
         if (!db.CountryLists.Any (c => c.Country == country)) {
           db.CountryLists.Add (new CountryList {
@@ -104,7 +104,7 @@ namespace SteamData.DownloadedStatistics {
     }
     private void ExportCountryDLStatOverviewTo (SteamDataContext db) {
       foreach (DataTable table in Content.Tables) {
-        if ("BandWidth Data" == table.ToString ()) continue;
+        if ("BandWidth Data" == table.TableName) continue;
 
         string country = (string) table.Rows[1][1];
         if (!CountryIdMapping.TryGetValue (country, out int countryId)) {
@@ -130,7 +130,7 @@ namespace SteamData.DownloadedStatistics {
     }
     private void ExportCountryNetworkDLStatTo (SteamDataContext db) {
       foreach (DataTable table in Content.Tables) {
-        if ("BandWidth Data" == table.ToString ()) continue;
+        if ("BandWidth Data" == table.TableName) continue;
 
         string country = (string) table.Rows[1][1];
         if (!CountryIdMapping.TryGetValue (country, out int countryId)) {
