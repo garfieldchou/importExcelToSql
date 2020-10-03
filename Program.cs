@@ -56,10 +56,10 @@ namespace importSteamToSql {
     }
 
     static void ImportSteamFromDirectory (string dirt) {
-      var fileInfo = EnumerateXlsxFiles (dirt);
-      Trace.WriteLine ($"{fileInfo.Count} files to be handled...");
+      (int count, var files) = EnumerateXlsxFiles (dirt);
+      Trace.WriteLine ($"{count} files to be handled...");
 
-      foreach (var file in fileInfo.Files) {
+      foreach (var file in files) {
         ImportXlsxFile (file);
       }
 
