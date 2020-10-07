@@ -50,18 +50,14 @@ namespace SteamData.DownloadedStatistics {
         if (row[columnCount - 1].ToString () == "") break;
 
         for (int i = 0; i < columnCount / 4; i++) {
-          var dateTime = DateTime.Parse (row[4 * i + 2].ToString ());
+          var (dateTime, year, month, day, date, timeOfDay, workWeek) =
+          DateTime.Parse (row[4 * i + 2].ToString ());
 
           if (dateTime > latestInDB) {
             db.RegionDLStatDetails.Add (new RegionDLStatDetail {
-              Year = dateTime.Year,
-                Month = dateTime.Month,
-                WorkWeek = dateTime.GetIso8601WeekOfYear (),
-                Day = dateTime.Day,
-                Date = dateTime.Date.ToString ("MM/dd"),
-                Time = dateTime.TimeOfDay,
-                Full_DateTime = dateTime,
-                Country = row[4 * i + 1].ToString (),
+              Year = year, Month = month, WorkWeek = workWeek,
+                Day = day, Date = date.ToString ("MM/dd"), Time = timeOfDay,
+                Full_DateTime = dateTime, Country = row[4 * i + 1].ToString (),
                 BandWidthGbps = Int32.Parse (row[4 * i + 3].ToString ())
             });
           }

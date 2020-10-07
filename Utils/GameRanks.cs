@@ -21,16 +21,13 @@ namespace SteamData.GameRanks {
       DateTime latestStatInDB = stat.Length > 0 ? stat[0] : DateTime.MinValue;
 
       for (int i = 4; i < onlineStat.Rows.Count; i++) {
-        DateTime dateTime = DateTime.Parse (onlineStat.Rows[i][1].ToString ());
+        var (dateTime, year, month, day, date, timeOfDay, workWeek) =
+        DateTime.Parse (onlineStat.Rows[i][1].ToString ());
 
         if (dateTime > latestStatInDB) {
           db.OnlineStats.Add (new OnlineStat {
-            Year = dateTime.Year,
-              Month = dateTime.Month,
-              WorkWeek = dateTime.GetIso8601WeekOfYear (),
-              Day = dateTime.Day,
-              Time = dateTime.TimeOfDay,
-              DateTime = dateTime,
+            Year = year, Month = month, WorkWeek = workWeek,
+              Day = day, Time = timeOfDay, DateTime = dateTime,
               Players = Int32.Parse (onlineStat.Rows[i][2].ToString ())
           });
         }
