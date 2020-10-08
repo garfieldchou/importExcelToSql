@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using McMaster.Extensions.CommandLineUtils;
 using SteamData;
+using static DotNetEnv.Env;
 using static SteamData.SteamDataFactory;
 using static System.IO.Path;
 
@@ -90,12 +91,13 @@ namespace importSteamToSql {
       Encoding.RegisterProvider (CodePagesEncodingProvider.Instance);
 
       using (var steamDb = new SteamDataContext ()) {
+        Load ();
         GetStreamDataFrom (fileName).ExportTo (steamDb);
-        MoveProcessedFile (fileName);
+        MoveProcessedFile (fileName, GetBool ("MOVE_PROCESSED_FILE"));
       }
     }
 
-    public static void MoveProcessedFile (string fileName) {
+    public static void MoveProcessedFile (string fileName, bool moveProcessedFile = false) {
       string targetDirectory = Combine (
         GetDirectoryName (fileName),
         "..", "Processed");
@@ -106,10 +108,14 @@ namespace importSteamToSql {
 
       if (!Directory.Exists (targetDirectory)) Directory.CreateDirectory (targetDirectory);
 
-      Trace.WriteLine ($"Attempt to move\n{fileName}\nto\n{targetFileName}\n");
       try {
         FileInfo fInfo = new FileInfo (fileName);
-        fInfo.MoveTo (targetFileName);
+        Trace.WriteLine ($"Attempt to {(moveProcessedFile? "move": "copy")}\n{fileName}\nto\n{targetFileName}\n");
+        if (moveProcessedFile) {
+          fInfo.MoveTo (targetFileName);
+        } else {
+          fInfo.CopyTo (targetFileName);
+        }
       } catch (System.Exception ex) {
         Trace.WriteLine ($"{ex.GetType()}: {ex.Message}");
       }
