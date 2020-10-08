@@ -124,23 +124,23 @@ namespace SteamData.Utils {
           break;
       }
 
-      string targetDirectory = Combine (
-        GetDirectoryName (fileName),
-        "..", "Processed");
+      // string targetDirectory = Combine (
+      //   GetDirectoryName (fileName),
+      //   "..", "Processed");
 
-      string targetFileName = Combine (
-        targetDirectory,
-        GetFileName (fileName));
+      // string targetFileName = Combine (
+      //   targetDirectory,
+      //   GetFileName (fileName));
 
-      if (!Directory.Exists (targetDirectory)) Directory.CreateDirectory (targetDirectory);
+      // if (!Directory.Exists (targetDirectory)) Directory.CreateDirectory (targetDirectory);
 
-      Trace.WriteLine ($"Attempt to move\n{fileName}\nto\n{targetFileName}\n");
-      try {
-        FileInfo fInfo = new FileInfo (fileName);
-        fInfo.MoveTo (targetFileName);
-      } catch (System.Exception ex) {
-        Trace.WriteLine ($"{ex.GetType()}: {ex.Message}");
-      }
+      // Trace.WriteLine ($"Attempt to move\n{fileName}\nto\n{targetFileName}\n");
+      // try {
+      //   FileInfo fInfo = new FileInfo (fileName);
+      //   fInfo.MoveTo (targetFileName);
+      // } catch (System.Exception ex) {
+      //   Trace.WriteLine ($"{ex.GetType()}: {ex.Message}");
+      // }
     }
   }
 }
