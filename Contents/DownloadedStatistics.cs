@@ -13,7 +13,7 @@ namespace SteamData.DownloadedStatistics {
       int affected = 0;
 
       foreach (DataTable table in Content.Tables) {
-        if ("BandWidth Data" == table.TableName) continue;
+        if (table.TableName is "BandWidth Data") continue;
 
         string country = table.Rows[1][1].ToString ();
 
@@ -45,9 +45,9 @@ namespace SteamData.DownloadedStatistics {
 
       foreach (DataRow row in bwDetails.Rows) {
         // skip the header
-        if (row[0].ToString () == "") continue;
+        if (row[0].ToString () is "") continue;
         // ignore the summary
-        if (row[columnCount - 1].ToString () == "") break;
+        if (row[columnCount - 1].ToString () is "") break;
 
         for (int i = 0; i < columnCount / 4; i++) {
           var (dateTime, year, month, day, date, timeOfDay, workWeek) =
@@ -88,7 +88,7 @@ namespace SteamData.DownloadedStatistics {
           ov.Day == result.Day &&
           ov.Region == result.Region);
 
-        if (overview == null)
+        if (overview is null)
           db.RegionDLStatOverviews.Add (result);
         else {
           overview.Average = result.Average;
@@ -100,7 +100,7 @@ namespace SteamData.DownloadedStatistics {
     }
     private void ExportCountryDLStatOverviewTo (SteamDataContext db) {
       foreach (DataTable table in Content.Tables) {
-        if ("BandWidth Data" == table.TableName) continue;
+        if (table.TableName is "BandWidth Data") continue;
 
         string country = (string) table.Rows[1][1];
         if (!CountryIdMapping.TryGetValue (country, out int countryId)) {
@@ -126,7 +126,7 @@ namespace SteamData.DownloadedStatistics {
     }
     private void ExportCountryNetworkDLStatTo (SteamDataContext db) {
       foreach (DataTable table in Content.Tables) {
-        if ("BandWidth Data" == table.TableName) continue;
+        if (table.TableName is "BandWidth Data") continue;
 
         string country = (string) table.Rows[1][1];
         if (!CountryIdMapping.TryGetValue (country, out int countryId)) {

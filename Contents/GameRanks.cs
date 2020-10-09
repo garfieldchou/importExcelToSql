@@ -50,7 +50,7 @@ namespace SteamData.GameRanks {
         int players = Int32.Parse (gameRank.Rows[i][1].ToString (), AllowThousands);
         int peak = Int32.Parse (gameRank.Rows[i][2].ToString (), AllowThousands);
         string game = gameRank.Rows[i][3].ToString ();
-        string link = gameRank.Columns.Count == 5 ?
+        string link = gameRank.Columns.Count is 5 ?
           gameRank.Rows[i][4].ToString () :
           string.Empty;
 
@@ -83,7 +83,7 @@ namespace SteamData.GameRanks {
         string description = detail[1].ToString ();
         string recentReviews = detail[2].ToString ();
         string allReviews = detail[3].ToString ();
-        string gameLink = gameDetails.Columns.Count == 8 ? detail[7].ToString () : string.Empty;
+        string gameLink = gameDetails.Columns.Count is 8 ? detail[7].ToString () : string.Empty;
         string hotTags = detail[5].ToString ();
         string systemRequirements = detail[6].ToString ();
 

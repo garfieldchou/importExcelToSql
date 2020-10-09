@@ -32,7 +32,7 @@ namespace SteamData.HardwareSoftwareSurvey {
             Time = ReportDate,
             Category = category +
             (new Regex (@"^(Windows|OSX|Linux)$").IsMatch (item) &&
-              "OS Version" == category ?
+              category is "OS Version" ?
               "_SubTotal" : ""),
             Item = item,
             Percentage = Decimal.Parse (survey[3].ToString ().Split ('%') [0])

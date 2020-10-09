@@ -32,7 +32,7 @@ namespace SteamData {
 
       string connectionString =
         GetBool ("DB_INTEGRATED_SECURITY") &&
-        GetString ("DOTNET_ENV") == "prod" ?
+        GetString ("DOTNET_ENV") is "prod" ?
         string.Format ("Server={0};Database={1};Integrated Security={2};MultipleActiveResultSets={3}",
           GetString ("DB_SERVER"),
           GetString ("DB_NAME"),

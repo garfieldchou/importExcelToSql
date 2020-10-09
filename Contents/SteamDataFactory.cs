@@ -16,8 +16,8 @@ namespace SteamData {
       switch {
         "DownloadedStatistics" => new DownloadedStatisticsContent (fileName),
           "GameRanks" => new GameRanksContent (fileName),
-          var c when c == "Hardware_Software" ||
-            c == "HWSSurvey" => new HardwareSoftwareSurveyContent (fileName),
+          var c when c is "Hardware_Software" ||
+            c is "HWSSurvey" => new HardwareSoftwareSurveyContent (fileName),
             _ => null
       };
     }
