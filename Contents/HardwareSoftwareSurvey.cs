@@ -81,21 +81,12 @@ namespace SteamData.HardwareSoftwareSurvey {
       int latestYearInDb = detailInDb?.Year?? int.MinValue;
       int latestYearMonthInDb = detailInDb?.Month?? int.MinValue;
 
-      Debug.WriteLine ($"{ latestYearInDb }, { latestYearMonthInDb }");
-
-      Debug.WriteLine ($"**********");
-      Debug.WriteLine ($"{category}");
-      Debug.WriteLine ($"**********");
-
       for (int i = 1; i < usageDetails.Rows.Count; i++) {
         DataRow detail = usageDetails.Rows[i];
 
         if (detail[0].ToString () == string.Empty) {
           if (detail[1].ToString () != string.Empty) {
             category = detail[1].ToString ();
-            Debug.WriteLine ($"**********");
-            Debug.WriteLine ($"{category}");
-            Debug.WriteLine ($"**********");
           }
           continue;
         }
@@ -115,8 +106,6 @@ namespace SteamData.HardwareSoftwareSurvey {
           if (year < latestYearInDb ||
             (year == latestYearInDb && month <= latestYearMonthInDb)) continue;
 
-          Debug.WriteLine ($"row {i}: {year}-{month}-{item}-{percentage}");
-
           set.Add (new T {
             Year = year,
               Month = month,
@@ -125,7 +114,6 @@ namespace SteamData.HardwareSoftwareSurvey {
               Percentage = percentage
           });
         }
-        Debug.WriteLine ($"==============");
       }
     }
 
