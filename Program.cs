@@ -66,10 +66,11 @@ namespace importSteamToSql {
 
       // Print out the xlsx files left in the target directory to check if anything is missed.
       var processedFilesInfo = EnumerateXlsxFiles (dirt);
-      Trace.WriteLine ($"{processedFilesInfo.Count} xlsx file(s) in target directory");
+      (count, files) = EnumerateXlsxFiles (dirt);
+      Trace.WriteLine ($"{count} xlsx file(s) in target directory");
 
-      if (processedFilesInfo.Count > 0) {
-        foreach (var file in processedFilesInfo.Files) {
+      if (count > 0) {
+        foreach (var file in files) {
           Trace.WriteLine ($"{file}");
         }
       }
