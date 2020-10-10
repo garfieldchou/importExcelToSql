@@ -134,11 +134,12 @@ namespace SteamData.DownloadedStatistics {
         }
 
         for (int i = 9; i < table.Rows.Count; i++) {
-          string network = table.Rows[i][1].ToString ();
+          DataRow row = table.Rows[i];
+          string network = row[1].ToString ();
           var networkDlStat = new CountryNetworkDLStat {
             Time = ReportDate,
             Network = network,
-            AvgDlSpeedMbps = Decimal.Parse (((string) (table.Rows[i][2])).Split (' ') [0]),
+            AvgDlSpeedMbps = Decimal.Parse (((string) (row[2])).Split (' ') [0]),
             CountryListId = countryId
           };
           db.CountryNetworkDLStats.Add (networkDlStat);

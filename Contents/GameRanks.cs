@@ -21,14 +21,15 @@ namespace SteamData.GameRanks {
       DateTime latestStatInDB = stat.Length > 0 ? stat[0] : DateTime.MinValue;
 
       for (int i = 4; i < onlineStat.Rows.Count; i++) {
+        DataRow row = onlineStat.Rows[i];
         var (dateTime, year, month, day, date, timeOfDay, workWeek) =
-        DateTime.Parse (onlineStat.Rows[i][1].ToString ());
+        DateTime.Parse (row[1].ToString ());
 
         if (dateTime > latestStatInDB) {
           db.OnlineStats.Add (new OnlineStat {
             Year = year, Month = month, WorkWeek = workWeek,
               Day = day, Time = timeOfDay, DateTime = dateTime,
-              Players = Int32.Parse (onlineStat.Rows[i][2].ToString ())
+              Players = Int32.Parse (row[2].ToString ())
           });
         }
       }
@@ -46,12 +47,13 @@ namespace SteamData.GameRanks {
       }
 
       for (int i = 1; i < gameRank.Rows.Count; i++) {
-        int rank = Int32.Parse (gameRank.Rows[i][0].ToString ()) + 1;
-        int players = Int32.Parse (gameRank.Rows[i][1].ToString (), AllowThousands);
-        int peak = Int32.Parse (gameRank.Rows[i][2].ToString (), AllowThousands);
-        string game = gameRank.Rows[i][3].ToString ();
+        DataRow row = gameRank.Rows[i];
+        int rank = Int32.Parse (row[0].ToString ()) + 1;
+        int players = Int32.Parse (row[1].ToString (), AllowThousands);
+        int peak = Int32.Parse (row[2].ToString (), AllowThousands);
+        string game = row[3].ToString ();
         string link = gameRank.Columns.Count is 5 ?
-          gameRank.Rows[i][4].ToString () :
+          row[4].ToString () :
           string.Empty;
 
         if (!gameDetailsDict.TryGetValue (game, out int gameId)) gameId = 1;
