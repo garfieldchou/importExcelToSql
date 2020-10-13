@@ -91,7 +91,7 @@ namespace SteamData.GameRanks {
 
         DetailsGame detailGame = db.DetailsGames.FirstOrDefault (d => d.Game == game);
 
-        if (detailGame == default (DetailsGame)) {
+        if (detailGame == default) {
           db.DetailsGames.Add (new DetailsGame {
             Game = game,
               GameDescription = description,
