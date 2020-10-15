@@ -80,7 +80,7 @@ namespace SteamData.GameRanks {
       var gameDetails = Content.Tables[2];
       for (int i = 1; i < gameDetails.Rows.Count; i++) {
         DataRow detail = gameDetails.Rows[i];
-        DateTime releaseDate = DateTime.Parse (detail[4].ToString ());
+        if (!DateTime.TryParse (detail[4].ToString (), out DateTime releaseDate)) continue;
         string game = detail[0].ToString ();
         string description = detail[1].ToString ();
         string recentReviews = detail[2].ToString ();
@@ -125,7 +125,7 @@ namespace SteamData.GameRanks {
       var gameDetails = Content.Tables[2];
       for (int i = 1; i < gameDetails.Rows.Count; i++) {
         DataRow detail = gameDetails.Rows[i];
-        DateTime releaseDate = DateTime.Parse (detail[4].ToString ());
+        if (!DateTime.TryParse (detail[4].ToString (), out DateTime releaseDate)) continue;
         string game = detail[0].ToString ();
 
         if (!gameDetailsDict.TryGetValue (game, out int gameId)) gameId = 1;
