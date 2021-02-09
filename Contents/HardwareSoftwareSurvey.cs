@@ -103,6 +103,8 @@ namespace SteamData.HardwareSoftwareSurvey {
           int year = month > 12 ? startYear + 1 : startYear;
           month = month > 12 ? month - 12 : month;
 
+          if (year == ReportYear && month > ReportMonth) continue;
+
           if (year < latestYearInDb ||
             (year == latestYearInDb && month <= latestYearMonthInDb)) continue;
 
