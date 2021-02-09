@@ -73,7 +73,7 @@ namespace SteamData.HardwareSoftwareSurvey {
       int startYear = ReportYear;
       string category = usageDetails.Rows[0][1].ToString ();
 
-      if (monthStart > 8) startYear -= 1;
+      if (monthStart >= 8) startYear -= 1;
 
       var detailInDb = (
         from d in set orderby d.Year descending, d.Month descending select d).FirstOrDefault ();
